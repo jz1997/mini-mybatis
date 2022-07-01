@@ -5,7 +5,9 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.Objects;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class MapperProxy<T> implements InvocationHandler, Serializable {
   private static final long serialVersionUID = 4003385104312037415L;
 

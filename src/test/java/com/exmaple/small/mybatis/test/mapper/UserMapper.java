@@ -1,7 +1,11 @@
 package com.exmaple.small.mybatis.test.mapper;
+
+import com.exmaple.small.mybatis.test.entity.User;
+import java.util.List;
+
 // User Mapper For Test
 public interface UserMapper {
-  String findById(String id);
+  User findById(String id);
 
-  String findAll();
+  List<User> findAll(User user);
 }

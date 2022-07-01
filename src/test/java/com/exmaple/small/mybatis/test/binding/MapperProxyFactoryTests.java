@@ -1,29 +1,30 @@
 package com.exmaple.small.mybatis.test.binding;
 
-import com.exmaple.small.mybatis.binding.MapperRegistry;
-import com.exmaple.small.mybatis.session.DefaultSqlSessionFactory;
+import cn.hutool.core.lang.ResourceClassLoader;
 import com.exmaple.small.mybatis.session.SqlSession;
 import com.exmaple.small.mybatis.session.SqlSessionFactory;
+import com.exmaple.small.mybatis.session.SqlSessionFactoryBuilder;
 import com.exmaple.small.mybatis.test.mapper.UserMapper;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
 @Slf4j
 public class MapperProxyFactoryTests {
   @Test
-  public void test_newInstance() {
-    MapperRegistry mapperRegistry = new MapperRegistry();
-    mapperRegistry.addMappers("com.exmaple.small.mybatis.test.mapper");
+  public void test_newInstance() throws IOException {
+    try (InputStream inputStream =
+        ResourceClassLoader.getSystemClassLoader().getResourceAsStream("userMapper.xml")) {
+      assert inputStream != null;
 
-    SqlSessionFactory sqlSessionFactory = new DefaultSqlSessionFactory(mapperRegistry);
-    SqlSession sqlSession = sqlSessionFactory.openSession();
-
-    UserMapper mapper = sqlSession.getMapper(UserMapper.class);
-
-    String findAllResult = mapper.findAll();
-    log.info(findAllResult);
-
-    String findByIdResult = mapper.findById("1");
-    log.info(findByIdResult);
+      Reader reader = new InputStreamReader(inputStream);
+      SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(reader);
+      SqlSession sqlSession = sqlSessionFactory.openSession();
+      UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+      userMapper.findById("1");
+    }
   }
 }

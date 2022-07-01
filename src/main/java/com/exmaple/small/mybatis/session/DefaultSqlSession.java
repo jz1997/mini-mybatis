@@ -1,16 +1,15 @@
 package com.exmaple.small.mybatis.session;
 
-import com.exmaple.small.mybatis.binding.MapperRegistry;
-import java.util.*;
+import lombok.extern.slf4j.Slf4j;
 
 /** 默认 SqlSession 实现 */
+@Slf4j
 public class DefaultSqlSession implements SqlSession {
 
-  /** */
-  public MapperRegistry mapperRegistry;
+  private Configuration configuration;
 
-  public DefaultSqlSession(MapperRegistry mapperRegistry) {
-    this.mapperRegistry = mapperRegistry;
+  public DefaultSqlSession(Configuration configuration) {
+    this.configuration = configuration;
   }
 
   @Override
@@ -20,11 +19,14 @@ public class DefaultSqlSession implements SqlSession {
 
   @Override
   public <T> T selectOne(String statement, Object params) {
-    return (T) String.format("selectOne(%s, %s)", statement, params);
+    // TODO: IMPLEMENT TO QUERY DATA FROM DATABASE
+    log.info("代理方法({}, {})", statement, params);
+    log.info(configuration.getMappedStatement(statement).getSqlSource().getSql());
+    return (T) null;
   }
 
   @Override
   public <T> T getMapper(Class<T> type) {
-    return mapperRegistry.getMapper(type, this);
+    return configuration.getMapper(type, this);
   }
 }
