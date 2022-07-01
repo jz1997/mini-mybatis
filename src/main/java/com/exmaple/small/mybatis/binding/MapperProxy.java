@@ -1,18 +1,18 @@
 package com.exmaple.small.mybatis.binding;
 
+import com.exmaple.small.mybatis.session.SqlSession;
 import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
-import java.util.Map;
 import java.util.Objects;
 
 public class MapperProxy<T> implements InvocationHandler, Serializable {
   private static final long serialVersionUID = 4003385104312037415L;
 
-  private final Map<String, String> sqlSession;
+  private final SqlSession sqlSession;
   private final Class<T> mapperInterface;
 
-  public MapperProxy(Map<String, String> sqlSession, Class<T> mapperInterface) {
+  public MapperProxy(SqlSession sqlSession, Class<T> mapperInterface) {
     this.sqlSession = sqlSession;
     this.mapperInterface = mapperInterface;
   }
@@ -23,7 +23,7 @@ public class MapperProxy<T> implements InvocationHandler, Serializable {
     if (Objects.equals(Object.class, method.getDeclaringClass())) {
       return method.invoke(this, args);
     } else {
-      return sqlSession.get(mapperInterface.getName() + "." + method.getName());
+      return sqlSession.selectOne(mapperInterface.getName() + "." + method.getName(), args);
     }
   }
 }

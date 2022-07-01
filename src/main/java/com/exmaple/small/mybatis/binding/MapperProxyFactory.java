@@ -1,7 +1,7 @@
 package com.exmaple.small.mybatis.binding;
 
+import com.exmaple.small.mybatis.session.SqlSession;
 import java.lang.reflect.Proxy;
-import java.util.Map;
 
 public class MapperProxyFactory<T> {
   private final Class<T> mapperInterface;
@@ -11,7 +11,7 @@ public class MapperProxyFactory<T> {
   }
 
   @SuppressWarnings("unchecked")
-  public T newInstance(Map<String, String> sqlSession) {
+  public T newInstance(SqlSession sqlSession) {
     MapperProxy<T> proxy = new MapperProxy<>(sqlSession, mapperInterface);
     return (T)
         Proxy.newProxyInstance(
