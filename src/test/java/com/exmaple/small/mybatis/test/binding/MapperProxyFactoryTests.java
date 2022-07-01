@@ -5,8 +5,10 @@ import com.exmaple.small.mybatis.session.DefaultSqlSessionFactory;
 import com.exmaple.small.mybatis.session.SqlSession;
 import com.exmaple.small.mybatis.session.SqlSessionFactory;
 import com.exmaple.small.mybatis.test.mapper.UserMapper;
+import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 
+@Slf4j
 public class MapperProxyFactoryTests {
   @Test
   public void test_newInstance() {
@@ -18,7 +20,10 @@ public class MapperProxyFactoryTests {
 
     UserMapper mapper = sqlSession.getMapper(UserMapper.class);
 
-    String result = mapper.findAll();
-    System.out.println(result);
+    String findAllResult = mapper.findAll();
+    log.info(findAllResult);
+
+    String findByIdResult = mapper.findById("1");
+    log.info(findByIdResult);
   }
 }
