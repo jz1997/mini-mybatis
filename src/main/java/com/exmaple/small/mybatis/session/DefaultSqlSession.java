@@ -14,7 +14,7 @@ public class DefaultSqlSession implements SqlSession {
 
   @Override
   public <T> T selectOne(String statement) {
-    return (T) String.format("selectOne(%s)", statement);
+    return (T) null;
   }
 
   @Override
