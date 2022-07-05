@@ -2,7 +2,6 @@ package com.exmaple.small.mybatis.session;
 
 import com.exmaple.small.mybatis.xml.XmlConfigBuilder;
 import java.io.Reader;
-import java.util.*;
 
 /** */
 public class SqlSessionFactoryBuilder {

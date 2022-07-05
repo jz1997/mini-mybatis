@@ -1,5 +1,19 @@
 package com.exmaple.small.mybatis.session;
 
+import cn.hutool.core.collection.CollectionUtil;
+import cn.hutool.core.collection.ListUtil;
+import cn.hutool.core.util.ReflectUtil;
+import com.exmaple.small.mybatis.binding.MappedStatement;
+import java.io.Reader;
+import java.lang.reflect.Field;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import javax.sql.DataSource;
 import lombok.extern.slf4j.Slf4j;
 
 /** 默认 SqlSession 实现 */
@@ -18,11 +32,45 @@ public class DefaultSqlSession implements SqlSession {
   }
 
   @Override
+  @SuppressWarnings("unchecked")
   public <T> T selectOne(String statement, Object params) {
-    // TODO: IMPLEMENT TO QUERY DATA FROM DATABASE
-    log.info("代理方法({}, {})", statement, params);
-    log.info(configuration.getMappedStatement(statement).getSqlSource().getSql());
-    return (T) null;
+    MappedStatement mappedStatement = configuration.getMappedStatement(statement);
+    String sql = mappedStatement.getSqlSource().getSql();
+    sql = sql.replaceAll("#\\{id}", "?");
+    DataSource dataSource = configuration.getEnvironment().getDataSource();
+    try {
+      Connection connection = dataSource.getConnection();
+      PreparedStatement preparedStatement = connection.prepareStatement(sql);
+      preparedStatement.setString(1, ((Object[]) params)[0].toString());
+      try (ResultSet resultSet = preparedStatement.executeQuery()) {
+        List<T> objects = (List<T>) resultSetToObj(mappedStatement.getResultType(), resultSet);
+        return CollectionUtil.isEmpty(objects) ? null : objects.get(0);
+      }
+    } catch (SQLException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  private List<Object> resultSetToObj(String resultType, ResultSet rs) {
+    try {
+      Class<?> resultClass = Class.forName(resultType);
+      List<Object> objects = new ArrayList<>();
+      while (rs.next()) {
+        Object o = resultClass.newInstance();
+        Field[] fields = ReflectUtil.getFields(resultClass);
+        for (Field field : fields) {
+          ReflectUtil.setFieldValue(o, field, rs.getObject(field.getName()));
+        }
+        objects.add(o);
+      }
+
+      return objects;
+    } catch (ClassNotFoundException
+        | IllegalAccessException
+        | InstantiationException
+        | SQLException e) {
+      throw new RuntimeException(e);
+    }
   }
 
   @Override
