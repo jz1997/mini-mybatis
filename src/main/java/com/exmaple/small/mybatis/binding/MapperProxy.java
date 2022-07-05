@@ -5,7 +5,9 @@ import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.util.Objects;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class MapperProxy<T> implements InvocationHandler, Serializable {
   private static final long serialVersionUID = 4003385104312037415L;
 
@@ -23,7 +25,7 @@ public class MapperProxy<T> implements InvocationHandler, Serializable {
     if (Objects.equals(Object.class, method.getDeclaringClass())) {
       return method.invoke(this, args);
     } else {
-      return sqlSession.selectOne(mapperInterface.getName() + "." + method.getName(), args);
+      return sqlSession.<T>selectOne(mapperInterface.getName() + "." + method.getName(), args);
     }
   }
 }
