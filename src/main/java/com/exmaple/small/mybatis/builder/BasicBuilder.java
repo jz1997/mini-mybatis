@@ -13,4 +13,12 @@ public abstract class BasicBuilder {
   public BasicBuilder(Configuration configuration) {
     this.configuration = configuration;
   }
+
+  public Configuration getConfiguration() {
+    return configuration;
+  }
+
+  public void setConfiguration(Configuration configuration) {
+    this.configuration = configuration;
+  }
 }

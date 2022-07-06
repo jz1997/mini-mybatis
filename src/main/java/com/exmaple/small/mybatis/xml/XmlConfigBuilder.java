@@ -10,7 +10,6 @@ import com.exmaple.small.mybatis.mapping.Environment;
 import com.exmaple.small.mybatis.mapping.SqlSource;
 import com.exmaple.small.mybatis.session.Configuration;
 import com.exmaple.small.mybatis.transaction.TransactionFactory;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Reader;
