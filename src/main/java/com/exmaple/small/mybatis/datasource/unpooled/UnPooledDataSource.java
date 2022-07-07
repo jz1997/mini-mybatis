@@ -36,7 +36,7 @@ public class UnPooledDataSource extends AbstractDataSource {
   protected Integer level;
 
   /** */
-  protected Boolean autocommit;
+  protected Boolean autoCommit;
 
   /** */
   protected static final Map<String, Driver> registerDrivers = new ConcurrentHashMap<>();
@@ -91,8 +91,8 @@ public class UnPooledDataSource extends AbstractDataSource {
       connection.setTransactionIsolation(level);
     }
 
-    if (this.autocommit != null) {
-      connection.setAutoCommit(autocommit);
+    if (this.autoCommit != null) {
+      connection.setAutoCommit(autoCommit);
     }
   }
 
