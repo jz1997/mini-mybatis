@@ -2,7 +2,9 @@ package com.exmaple.small.mybatis.session;
 
 import com.exmaple.small.mybatis.binding.MappedStatement;
 import com.exmaple.small.mybatis.binding.MapperRegistry;
-import com.exmaple.small.mybatis.datasource.SimpleDataSourceFactory;
+import com.exmaple.small.mybatis.datasource.pooled.PooledDataSourceFactory;
+import com.exmaple.small.mybatis.datasource.simple.SimpleDataSourceFactory;
+import com.exmaple.small.mybatis.datasource.unpooled.UnPooledDataSourceFactory;
 import com.exmaple.small.mybatis.mapping.Environment;
 import com.exmaple.small.mybatis.transaction.JdbcTransactionFactory;
 import com.exmaple.small.mybatis.type.TypeAliasRegistry;
@@ -21,7 +23,11 @@ public class Configuration {
 
   public Configuration() {
     typeAliasRegistry.registerAlias("JDBC", JdbcTransactionFactory.class);
+
+    // register datasource factory
     typeAliasRegistry.registerAlias("SIMPLE", SimpleDataSourceFactory.class);
+    typeAliasRegistry.registerAlias("UNPOOLED", UnPooledDataSourceFactory.class);
+    typeAliasRegistry.registerAlias("POOLED", PooledDataSourceFactory.class);
   }
 
   public Configuration(Environment environment) {

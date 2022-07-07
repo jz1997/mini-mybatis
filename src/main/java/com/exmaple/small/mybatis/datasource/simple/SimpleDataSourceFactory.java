@@ -1,5 +1,6 @@
-package com.exmaple.small.mybatis.datasource;
+package com.exmaple.small.mybatis.datasource.simple;
 
+import com.exmaple.small.mybatis.datasource.DataSourceFactory;
 import java.util.*;
 import javax.sql.DataSource;
 
