@@ -5,9 +5,10 @@ import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.XmlUtil;
 import com.exmaple.small.mybatis.binding.MappedStatement;
 import com.exmaple.small.mybatis.builder.BasicBuilder;
+import com.exmaple.small.mybatis.builder.SqlSourceBuilder;
 import com.exmaple.small.mybatis.datasource.DataSourceFactory;
 import com.exmaple.small.mybatis.mapping.Environment;
-import com.exmaple.small.mybatis.mapping.SqlSource;
+import com.exmaple.small.mybatis.session.SqlSource;
 import com.exmaple.small.mybatis.session.Configuration;
 import com.exmaple.small.mybatis.transaction.TransactionFactory;
 import java.io.IOException;
@@ -169,9 +170,15 @@ public class XmlConfigBuilder extends BasicBuilder {
     String parameterType = e.getAttribute("parameterType");
     String resultType = e.getAttribute("resultType");
     String sql = e.getTextContent();
-    SqlSource sqlSource = new SqlSource(sql);
     String msId = namespace + "." + id;
+    SqlSource sqlSource;
+    try {
+      sqlSource = new SqlSourceBuilder(configuration).parse(sql, Class.forName(parameterType));
+    } catch (ClassNotFoundException ex) {
+      log.error("Class not found: {}.", parameterType);
+      throw new RuntimeException(ex);
+    }
     return new MappedStatement(
-        msId, namespace, sqlSource, parameterType, resultType, e.getNodeName());
+        configuration, msId, namespace, sqlSource, parameterType, resultType, e.getNodeName());
   }
 }

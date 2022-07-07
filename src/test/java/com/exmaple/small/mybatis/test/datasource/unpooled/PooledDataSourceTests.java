@@ -24,6 +24,19 @@ public class PooledDataSourceTests {
     InputStreamReader reader = new InputStreamReader(inputStream);
     SqlSession sqlSession = new SqlSessionFactoryBuilder().build(reader).openSession();
     UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+    User user = userMapper.findById("1");
+    log.info("Find User: {}", user);
+    Assertions.assertNotNull(user);
+  }
+
+  @Test
+  public void test_async_findById_success() {
+    InputStream inputStream =
+        ResourceClassLoader.getSystemResourceAsStream("pooled/mybatis-config-pooled.xml");
+    assert inputStream != null;
+    InputStreamReader reader = new InputStreamReader(inputStream);
+    SqlSession sqlSession = new SqlSessionFactoryBuilder().build(reader).openSession();
+    UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
 
     CountDownLatch latch = new CountDownLatch(20);
     IntStream.range(0, 20)

@@ -5,8 +5,14 @@ import com.exmaple.small.mybatis.binding.MapperRegistry;
 import com.exmaple.small.mybatis.datasource.pooled.PooledDataSourceFactory;
 import com.exmaple.small.mybatis.datasource.simple.SimpleDataSourceFactory;
 import com.exmaple.small.mybatis.datasource.unpooled.UnPooledDataSourceFactory;
+import com.exmaple.small.mybatis.executor.Executor;
+import com.exmaple.small.mybatis.executor.ResultHandler;
+import com.exmaple.small.mybatis.executor.SimpleExecutor;
+import com.exmaple.small.mybatis.executor.statement.SimpleStatementHandler;
+import com.exmaple.small.mybatis.executor.statement.StatementHandler;
 import com.exmaple.small.mybatis.mapping.Environment;
 import com.exmaple.small.mybatis.transaction.JdbcTransactionFactory;
+import com.exmaple.small.mybatis.transaction.Transaction;
 import com.exmaple.small.mybatis.type.TypeAliasRegistry;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,11 +20,8 @@ import java.util.Map;
 public class Configuration {
 
   protected MapperRegistry mapperRegistry = new MapperRegistry();
-
   protected Map<String, MappedStatement> mappedStatements = new HashMap<>();
-
   protected TypeAliasRegistry typeAliasRegistry = new TypeAliasRegistry();
-
   protected Environment environment;
 
   public Configuration() {
@@ -65,5 +68,14 @@ public class Configuration {
 
   public void setEnvironment(Environment environment) {
     this.environment = environment;
+  }
+
+  public StatementHandler newStatementHandler(
+      MappedStatement ms, Object parameterObj, ResultHandler<?> resultHandler) {
+    return new SimpleStatementHandler(ms, parameterObj, resultHandler);
+  }
+
+  public Executor newExecutor(Transaction transaction) {
+    return new SimpleExecutor(this, transaction);
   }
 }
