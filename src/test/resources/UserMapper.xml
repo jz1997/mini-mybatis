@@ -11,4 +11,11 @@
         select *
         from user
     </select>
+
+    <select id="findOne" parameterType="com.exmaple.small.mybatis.test.entity.User"
+        resultType="com.exmaple.small.mybatis.test.entity.User">
+        select *
+        from user
+        where id = #{id}
+    </select>
 </mapper>

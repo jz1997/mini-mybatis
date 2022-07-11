@@ -84,6 +84,7 @@ public class JdbcTransaction implements Transaction {
     if (connection != null) {
       resetAutoCommit();
       connection.close();
+      connection = null;
     }
   }
 

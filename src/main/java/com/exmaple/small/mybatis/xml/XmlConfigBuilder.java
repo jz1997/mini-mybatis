@@ -1,17 +1,14 @@
 package com.exmaple.small.mybatis.xml;
 
-import cn.hutool.core.util.ClassLoaderUtil;
+import cn.hutool.core.lang.Assert;
 import cn.hutool.core.util.StrUtil;
 import cn.hutool.core.util.XmlUtil;
-import com.exmaple.small.mybatis.binding.MappedStatement;
 import com.exmaple.small.mybatis.builder.BasicBuilder;
 import com.exmaple.small.mybatis.datasource.DataSourceFactory;
 import com.exmaple.small.mybatis.mapping.Environment;
-import com.exmaple.small.mybatis.mapping.SqlSource;
 import com.exmaple.small.mybatis.session.Configuration;
 import com.exmaple.small.mybatis.transaction.TransactionFactory;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.Reader;
 import java.util.List;
 import java.util.Objects;
@@ -139,39 +136,8 @@ public class XmlConfigBuilder extends BasicBuilder {
   }
 
   private void parseMapperElement(Element mapperElement) {
-    String mapperResource = mapperElement.getAttribute("resource");
-    try (InputStream ins = ClassLoaderUtil.getClassLoader().getResourceAsStream(mapperResource)) {
-      Document document = XmlUtil.readXML(ins);
-      parseMapperXml(XmlUtil.getRootElement(document));
-    } catch (IOException e) {
-      throw new RuntimeException(e);
-    }
-  }
-
-  private void parseMapperXml(Element root) {
-    final String namespace = root.getAttribute("namespace");
-    List<Element> msElements = XmlUtil.getElements(root, "");
-    msElements.stream()
-        .map(e -> this.elementToMappedStatement(namespace, e))
-        .forEach(mappedStatement -> configuration.addMappedStatement(mappedStatement));
-
-    // Add Mapper
-    try {
-      configuration.addMapper(Class.forName(namespace));
-    } catch (ClassNotFoundException ex) {
-      log.info("Mapper class not found: {}, err: {}", namespace, ex.getMessage());
-      throw new RuntimeException(ex);
-    }
-  }
-
-  private MappedStatement elementToMappedStatement(String namespace, Element e) {
-    String id = e.getAttribute("id");
-    String parameterType = e.getAttribute("parameterType");
-    String resultType = e.getAttribute("resultType");
-    String sql = e.getTextContent();
-    SqlSource sqlSource = new SqlSource(sql);
-    String msId = namespace + "." + id;
-    return new MappedStatement(
-        msId, namespace, sqlSource, parameterType, resultType, e.getNodeName());
+    String resource = mapperElement.getAttribute("resource");
+    Assert.notNull(resource);
+    new XmlMapperBuilder(configuration, resource).parse();
   }
 }
