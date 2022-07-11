@@ -7,6 +7,8 @@ import com.exmaple.small.mybatis.test.entity.User;
 import com.exmaple.small.mybatis.test.mapper.UserMapper;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.List;
+import java.util.Map;
 import java.util.concurrent.CountDownLatch;
 import java.util.stream.IntStream;
 import lombok.extern.slf4j.Slf4j;
@@ -55,5 +57,19 @@ public class PooledDataSourceTests {
     } catch (InterruptedException e) {
       throw new RuntimeException(e);
     }
+  }
+
+  @Test
+  public void test_findOne_success() {
+    InputStream inputStream =
+        ResourceClassLoader.getSystemResourceAsStream("pooled/mybatis-config-pooled.xml");
+    assert inputStream != null;
+    InputStreamReader reader = new InputStreamReader(inputStream);
+    SqlSession sqlSession = new SqlSessionFactoryBuilder().build(reader).openSession();
+    UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+    User userQuery = User.builder().id("1").build();
+    User user = userMapper.findOne(userQuery);
+    log.info("Find User: {}", user);
+    Assertions.assertNotNull(user);
   }
 }

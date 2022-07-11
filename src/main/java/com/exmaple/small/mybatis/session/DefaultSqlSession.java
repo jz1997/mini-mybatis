@@ -2,7 +2,6 @@ package com.exmaple.small.mybatis.session;
 
 import com.exmaple.small.mybatis.binding.MappedStatement;
 import com.exmaple.small.mybatis.executor.Executor;
-import com.exmaple.small.mybatis.executor.ResultHandler;
 import java.sql.SQLException;
 import java.util.List;
 import lombok.extern.slf4j.Slf4j;

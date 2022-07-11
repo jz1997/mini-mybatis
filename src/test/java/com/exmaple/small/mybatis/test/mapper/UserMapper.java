@@ -7,5 +7,7 @@ import java.util.List;
 public interface UserMapper {
   User findById(String id);
 
+  User findOne(User user);
+
   List<User> findAll(User user);
 }

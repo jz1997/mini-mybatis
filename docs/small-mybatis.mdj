@@ -20942,7 +20942,8 @@
 									"_parent": {
 										"$ref": "AAAAAAGB1zRCN6qpjAY="
 									},
-									"name": "Statement statement"
+									"name": "Statement statement",
+									"type": ""
 								},
 								{
 									"_type": "UMLParameter",
@@ -20950,7 +20951,8 @@
 									"_parent": {
 										"$ref": "AAAAAAGB1zRCN6qpjAY="
 									},
-									"name": "ResultHandler resultHandler"
+									"name": "ResultHandler resultHandler",
+									"type": ""
 								},
 								{
 									"_type": "UMLParameter",

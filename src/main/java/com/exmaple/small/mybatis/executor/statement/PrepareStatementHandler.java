@@ -3,20 +3,23 @@ package com.exmaple.small.mybatis.executor.statement;
 import com.exmaple.small.mybatis.binding.MappedStatement;
 import com.exmaple.small.mybatis.executor.ResultHandler;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
+import lombok.extern.slf4j.Slf4j;
 
-public class SimpleStatementHandler extends BaseStatementHandler {
+@Slf4j
+public class PrepareStatementHandler extends BaseStatementHandler {
 
-  public SimpleStatementHandler(
+  public PrepareStatementHandler(
       MappedStatement ms, Object parameterObject, ResultHandler<?> resultHandler) {
     super(ms, parameterObject, resultHandler);
   }
 
   @Override
   protected Statement createStatement(Connection connection) throws SQLException {
-    return connection.createStatement();
+    return connection.prepareStatement(boundSql.getSql());
   }
 
   @Override
@@ -24,7 +27,8 @@ public class SimpleStatementHandler extends BaseStatementHandler {
       throws SQLException {
     try {
       String sql = boundSql.getSql();
-      statement.execute(sql);
+      log.info("PrepareStatementHandler.query: sql={}", sql);
+      ((PreparedStatement) statement).execute();
       return resultSetHandler.handleResultSet(statement);
     } finally {
       closeStatement(statement);
@@ -33,6 +37,6 @@ public class SimpleStatementHandler extends BaseStatementHandler {
 
   @Override
   public void parameterize(Statement statement, Object parameter) throws SQLException {
-    // nothing to do
+    parameterHandler.setParameters((PreparedStatement) statement);
   }
 }

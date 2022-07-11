@@ -8,6 +8,7 @@ import com.exmaple.small.mybatis.datasource.unpooled.UnPooledDataSourceFactory;
 import com.exmaple.small.mybatis.executor.Executor;
 import com.exmaple.small.mybatis.executor.ResultHandler;
 import com.exmaple.small.mybatis.executor.SimpleExecutor;
+import com.exmaple.small.mybatis.executor.statement.PrepareStatementHandler;
 import com.exmaple.small.mybatis.executor.statement.SimpleStatementHandler;
 import com.exmaple.small.mybatis.executor.statement.StatementHandler;
 import com.exmaple.small.mybatis.mapping.Environment;
@@ -15,7 +16,9 @@ import com.exmaple.small.mybatis.transaction.JdbcTransactionFactory;
 import com.exmaple.small.mybatis.transaction.Transaction;
 import com.exmaple.small.mybatis.type.TypeAliasRegistry;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 public class Configuration {
 
@@ -24,7 +27,10 @@ public class Configuration {
   protected TypeAliasRegistry typeAliasRegistry = new TypeAliasRegistry();
   protected Environment environment;
 
+  protected Set<String> alreadyLoadMapperSet = new HashSet<>();
+
   public Configuration() {
+    // register transaction factory
     typeAliasRegistry.registerAlias("JDBC", JdbcTransactionFactory.class);
 
     // register datasource factory
@@ -72,10 +78,18 @@ public class Configuration {
 
   public StatementHandler newStatementHandler(
       MappedStatement ms, Object parameterObj, ResultHandler<?> resultHandler) {
-    return new SimpleStatementHandler(ms, parameterObj, resultHandler);
+    return new PrepareStatementHandler(ms, parameterObj, resultHandler);
   }
 
   public Executor newExecutor(Transaction transaction) {
     return new SimpleExecutor(this, transaction);
+  }
+
+  public boolean isMapperAlreadyParsed(String resource) {
+    return alreadyLoadMapperSet.contains(resource);
+  }
+
+  public void addParsedMapper(String resource) {
+    alreadyLoadMapperSet.add(resource);
   }
 }

@@ -3,12 +3,19 @@
         resultType="com.exmaple.small.mybatis.test.entity.User">
         select *
         from user
-        where id = 1
+        where id = #{id}
     </select>
 
     <select id="findAll" parameterType="com.exmaple.small.mybatis.test.entity.User"
         resultType="com.exmaple.small.mybatis.test.entity.User">
         select *
         from user
+    </select>
+
+    <select id="findOne" parameterType="com.exmaple.small.mybatis.test.entity.User"
+        resultType="com.exmaple.small.mybatis.test.entity.User">
+        select *
+        from user
+        where id = #{id}
     </select>
 </mapper>
