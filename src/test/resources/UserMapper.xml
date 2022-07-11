@@ -18,4 +18,11 @@
         from user
         where id = #{id}
     </select>
+
+    <select id="findByUsername" parameterType="java.lang.String"
+        resultType="com.exmaple.small.mybatis.test.entity.User">
+        select *
+        from user
+        where username = #{username}
+    </select>
 </mapper>

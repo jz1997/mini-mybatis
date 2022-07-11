@@ -36,7 +36,10 @@ public class DefaultResultSetHandler implements ResultSetHandler {
         Object o = resultClass.newInstance();
         Field[] fields = ReflectUtil.getFields(resultClass);
         for (Field field : fields) {
-          ReflectUtil.setFieldValue(o, field, rs.getObject(field.getName()));
+
+          if (hasColumnInResultSet(field.getName(), rs)) {
+            ReflectUtil.setFieldValue(o, field, rs.getObject(field.getName()));
+          }
         }
         objects.add(o);
       }
@@ -46,6 +49,14 @@ public class DefaultResultSetHandler implements ResultSetHandler {
         | InstantiationException
         | SQLException e) {
       throw new RuntimeException(e);
+    }
+  }
+
+  private boolean hasColumnInResultSet(String columnName, ResultSet rs) throws SQLException {
+    try {
+      return rs.findColumn(columnName) > 0;
+    } catch (SQLException e) {
+      return false;
     }
   }
 }

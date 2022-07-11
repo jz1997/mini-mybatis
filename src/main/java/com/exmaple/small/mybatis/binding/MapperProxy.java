@@ -1,6 +1,8 @@
 package com.exmaple.small.mybatis.binding;
 
+import com.exmaple.small.mybatis.reflection.ParamNameResolver;
 import com.exmaple.small.mybatis.session.SqlSession;
+import java.io.Serial;
 import java.io.Serializable;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -9,7 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class MapperProxy<T> implements InvocationHandler, Serializable {
-  private static final long serialVersionUID = 4003385104312037415L;
+  @Serial private static final long serialVersionUID = 4003385104312037415L;
 
   private final SqlSession sqlSession;
   private final Class<T> mapperInterface;
@@ -21,11 +23,14 @@ public class MapperProxy<T> implements InvocationHandler, Serializable {
 
   @Override
   public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
-    // Object 方法不用进行代理
     if (Objects.equals(Object.class, method.getDeclaringClass())) {
       return method.invoke(this, args);
     } else {
-      return sqlSession.<T>selectOne(mapperInterface.getName() + "." + method.getName(), args);
+      // convert args to sql param
+      Object namedParams = new ParamNameResolver(method).getNamedParams(args);
+      log.info("Parsed params object: {}", namedParams);
+      return sqlSession.<T>selectOne(
+          mapperInterface.getName() + "." + method.getName(), namedParams);
     }
   }
 }

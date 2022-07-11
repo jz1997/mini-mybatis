@@ -97,7 +97,7 @@ public abstract class BaseExecutor implements Executor {
     return closed;
   }
 
-  protected void closeStatement(Statement statement) {
+  protected synchronized void closeStatement(Statement statement) {
     if (statement != null) {
       try {
         statement.close();

@@ -15,6 +15,8 @@ import com.exmaple.small.mybatis.mapping.Environment;
 import com.exmaple.small.mybatis.transaction.JdbcTransactionFactory;
 import com.exmaple.small.mybatis.transaction.Transaction;
 import com.exmaple.small.mybatis.type.TypeAliasRegistry;
+import com.exmaple.small.mybatis.type.TypeHandler;
+import com.exmaple.small.mybatis.type.TypeHandlerRegistry;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -25,6 +27,7 @@ public class Configuration {
   protected MapperRegistry mapperRegistry = new MapperRegistry();
   protected Map<String, MappedStatement> mappedStatements = new HashMap<>();
   protected TypeAliasRegistry typeAliasRegistry = new TypeAliasRegistry();
+  protected TypeHandlerRegistry typeHandlerRegistry = new TypeHandlerRegistry();
   protected Environment environment;
 
   protected Set<String> alreadyLoadMapperSet = new HashSet<>();
@@ -66,6 +69,10 @@ public class Configuration {
 
   public TypeAliasRegistry getTypeAliasRegistry() {
     return typeAliasRegistry;
+  }
+
+  public TypeHandlerRegistry getTypeHandlerRegistry() {
+    return typeHandlerRegistry;
   }
 
   public Environment getEnvironment() {

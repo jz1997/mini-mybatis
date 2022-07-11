@@ -80,7 +80,7 @@ public class JdbcTransaction implements Transaction {
 
   /** */
   @Override
-  public void close() throws SQLException {
+  public synchronized void close() throws SQLException {
     if (connection != null) {
       resetAutoCommit();
       connection.close();
