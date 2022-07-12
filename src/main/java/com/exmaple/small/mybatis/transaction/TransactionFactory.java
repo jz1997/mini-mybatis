@@ -5,9 +5,9 @@ import java.util.*;
 import javax.sql.DataSource;
 
 public interface TransactionFactory {
-  void setProperties(Properties properties);
+    void setProperties(Properties properties);
 
-  Transaction newTransaction(Connection conn);
+    Transaction newTransaction(Connection conn);
 
-  Transaction newTransaction(DataSource ds, TransactionIsolationLevel level, boolean autoCommit);
+    Transaction newTransaction(DataSource ds, TransactionIsolationLevel level, boolean autoCommit);
 }

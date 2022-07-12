@@ -4,9 +4,11 @@ import com.exmaple.small.mybatis.binding.MappedStatement;
 import com.exmaple.small.mybatis.session.BoundSql;
 import com.exmaple.small.mybatis.session.Configuration;
 import com.exmaple.small.mybatis.transaction.Transaction;
+
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
+
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -33,8 +35,8 @@ public abstract class BaseExecutor implements Executor {
 
   @Override
   public <E> List<E> query(
-      MappedStatement ms, Object parameter, ResultHandler<E> resultHandler, BoundSql boundSql)
-      throws SQLException {
+          MappedStatement ms, Object parameter, ResultHandler<E> resultHandler, BoundSql boundSql)
+          throws SQLException {
     if (closed) {
       throw new RuntimeException("Executor is closed.");
     }
@@ -42,8 +44,8 @@ public abstract class BaseExecutor implements Executor {
   }
 
   public abstract <E> List<E> doQuery(
-      MappedStatement ms, Object parameter, ResultHandler<E> resultHandler, BoundSql boundSql)
-      throws SQLException;
+          MappedStatement ms, Object parameter, ResultHandler<E> resultHandler, BoundSql boundSql)
+          throws SQLException;
 
   @Override
   public Transaction getTransaction() {

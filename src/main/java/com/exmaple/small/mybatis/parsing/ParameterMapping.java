@@ -6,5 +6,5 @@ import lombok.Data;
 @Data
 @Builder
 public class ParameterMapping {
-  private String property;
+    private String property;
 }
