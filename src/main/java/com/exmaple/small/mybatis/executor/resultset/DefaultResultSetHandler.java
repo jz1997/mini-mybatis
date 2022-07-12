@@ -14,11 +14,9 @@ import java.util.List;
 public class DefaultResultSetHandler implements ResultSetHandler {
 
     private MappedStatement mappedStatement;
-    private ResultHandler<?> resultHandler;
 
-    public DefaultResultSetHandler(MappedStatement mappedStatement, ResultHandler<?> resultHandler) {
+    public DefaultResultSetHandler(MappedStatement mappedStatement) {
         this.mappedStatement = mappedStatement;
-        this.resultHandler = resultHandler;
     }
 
     @SuppressWarnings("unchecked")
@@ -37,7 +35,6 @@ public class DefaultResultSetHandler implements ResultSetHandler {
                 Object o = resultClass.newInstance();
                 Field[] fields = ReflectUtil.getFields(resultClass);
                 for (Field field : fields) {
-
                     if (hasColumnInResultSet(field.getName(), rs)) {
                         ReflectUtil.setFieldValue(o, field, rs.getObject(field.getName()));
                     }

@@ -1,7 +1,6 @@
 package com.exmaple.small.mybatis.executor.statement;
 
 import com.exmaple.small.mybatis.binding.MappedStatement;
-import com.exmaple.small.mybatis.executor.ResultHandler;
 import com.exmaple.small.mybatis.executor.parameter.DefaultParameterHandler;
 import com.exmaple.small.mybatis.executor.parameter.ParameterHandler;
 import com.exmaple.small.mybatis.executor.resultset.DefaultResultSetHandler;
@@ -23,13 +22,13 @@ public abstract class BaseStatementHandler implements StatementHandler {
     protected BoundSql boundSql;
 
     public BaseStatementHandler(
-            MappedStatement ms, Object parameterObject, ResultHandler<?> resultHandler) {
+            MappedStatement ms, Object parameterObject) {
         this.mappedStatement = ms;
         this.configuration = ms.getConfiguration();
         this.boundSql = ms.getBoundSql(parameterObject);
         this.parameterHandler =
                 new DefaultParameterHandler(mappedStatement, configuration, parameterObject);
-        this.resultSetHandler = new DefaultResultSetHandler(ms, resultHandler);
+        this.resultSetHandler = new DefaultResultSetHandler(ms);
     }
 
     @Override

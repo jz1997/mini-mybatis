@@ -16,7 +16,7 @@ public class PrepareStatementHandler extends BaseStatementHandler {
 
     public PrepareStatementHandler(
             MappedStatement ms, Object parameterObject, ResultHandler<?> resultHandler) {
-        super(ms, parameterObject, resultHandler);
+        super(ms, parameterObject);
     }
 
     @Override

@@ -12,7 +12,7 @@ public class SimpleStatementHandler extends BaseStatementHandler {
 
     public SimpleStatementHandler(
             MappedStatement ms, Object parameterObject, ResultHandler<?> resultHandler) {
-        super(ms, parameterObject, resultHandler);
+        super(ms, parameterObject);
     }
 
     @Override
