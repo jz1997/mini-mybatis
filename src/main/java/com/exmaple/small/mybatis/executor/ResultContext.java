@@ -1,11 +1,11 @@
 package com.exmaple.small.mybatis.executor;
 
 public interface ResultContext<T> {
-  void stop();
+    void stop();
 
-  boolean isStopped();
+    boolean isStopped();
 
-  int getResultCount();
+    int getResultCount();
 
-  T getResultObject();
+    T getResultObject();
 }
