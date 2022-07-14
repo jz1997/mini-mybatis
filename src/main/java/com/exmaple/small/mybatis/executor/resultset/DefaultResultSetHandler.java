@@ -2,9 +2,9 @@ package com.exmaple.small.mybatis.executor.resultset;
 
 import cn.hutool.core.util.ReflectUtil;
 import com.exmaple.small.mybatis.binding.MappedStatement;
-import com.exmaple.small.mybatis.executor.ResultHandler;
+import com.exmaple.small.mybatis.type.TypeHandler;
 
-import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -13,7 +13,7 @@ import java.util.List;
 
 public class DefaultResultSetHandler implements ResultSetHandler {
 
-    private MappedStatement mappedStatement;
+    private final MappedStatement mappedStatement;
 
     public DefaultResultSetHandler(MappedStatement mappedStatement) {
         this.mappedStatement = mappedStatement;
@@ -23,38 +23,29 @@ public class DefaultResultSetHandler implements ResultSetHandler {
     @Override
     public <E> List<E> handleResultSet(Statement stmt) throws SQLException {
         try (ResultSet resultSet = stmt.getResultSet()) {
-            return (List<E>) resultSetToObj(mappedStatement.getResultType(), resultSet);
+            return (List<E>) resultSetToObj(mappedStatement.getResultType(),
+                    new ResultSetWrapper(resultSet, mappedStatement.getConfiguration())
+            );
         }
     }
 
-    private List<Object> resultSetToObj(String resultType, ResultSet rs) {
+    private List<Object> resultSetToObj(String resultType, ResultSetWrapper rsWrapper) throws SQLException {
+        List<Object> resultList = new ArrayList<>();
         try {
-            Class<?> resultClass = Class.forName(resultType);
-            List<Object> objects = new ArrayList<>();
-            while (rs.next()) {
-                Object o = resultClass.newInstance();
-                Field[] fields = ReflectUtil.getFields(resultClass);
-                for (Field field : fields) {
-                    if (hasColumnInResultSet(field.getName(), rs)) {
-                        ReflectUtil.setFieldValue(o, field, rs.getObject(field.getName()));
-                    }
+            Object result = Class.forName(resultType).getConstructor().newInstance();
+            while (rsWrapper.hasNext()) {
+                for (String columnName : rsWrapper.getColumnNames()) {
+                    Object columnValue = rsWrapper.getColumnValue(columnName);
+                    ReflectUtil.setFieldValue(result, columnName, columnValue);
                 }
-                objects.add(o);
+                resultList.add(result);
             }
-            return objects;
-        } catch (ClassNotFoundException
-                 | IllegalAccessException
-                 | InstantiationException
-                 | SQLException e) {
+        } catch (ClassNotFoundException | NoSuchMethodException | InstantiationException | IllegalAccessException |
+                 InvocationTargetException e) {
             throw new RuntimeException(e);
         }
-    }
 
-    private boolean hasColumnInResultSet(String columnName, ResultSet rs) throws SQLException {
-        try {
-            return rs.findColumn(columnName) > 0;
-        } catch (SQLException e) {
-            return false;
-        }
+
+        return resultList;
     }
 }
