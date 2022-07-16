@@ -1,8 +1,11 @@
 package com.exmaple.small.mybatis.xml;
 
 import cn.hutool.core.lang.Assert;
+import com.exmaple.small.mybatis.binding.SqlCommandType;
 import lombok.Data;
 import org.w3c.dom.Element;
+
+import java.util.Locale;
 
 @Data
 public class XmlStatement {
@@ -11,7 +14,7 @@ public class XmlStatement {
     private String parameterType;
     private String resultType;
     private String originalSql;
-    private String sqlCommandType;
+    private SqlCommandType sqlCommandType;
 
     public XmlStatement() {
     }
@@ -30,11 +33,12 @@ public class XmlStatement {
         Assert.notNull(resultType);
         Assert.notNull(originalSql);
         Assert.notNull(sqlCommandType);
+
         this.namespace = namespace;
         this.id = id;
         this.parameterType = parameterType;
         this.resultType = resultType;
         this.originalSql = originalSql;
-        this.sqlCommandType = sqlCommandType;
+        this.sqlCommandType = SqlCommandType.valueOf(sqlCommandType.toUpperCase(Locale.ENGLISH));
     }
 }

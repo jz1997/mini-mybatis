@@ -43,7 +43,7 @@ public class MappedStatement {
     /**
      * SELECT、INSERT、UPDATE、DELETE
      */
-    private String sqlCommandType;
+    private SqlCommandType sqlCommandType;
 
     public MappedStatement(Configuration configuration, XmlStatement xmlStatement) {
         try {
