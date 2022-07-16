@@ -1,18 +1,11 @@
 package com.exmaple.small.mybatis.reflection;
 
-import cn.hutool.core.util.StrUtil;
 import com.exmaple.small.mybatis.annotations.Param;
+import lombok.extern.slf4j.Slf4j;
 
-import java.lang.annotation.Annotation;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.SortedMap;
-import java.util.TreeMap;
-
-import lombok.extern.slf4j.Slf4j;
+import java.util.*;
 
 @Slf4j
 public class ParamNameResolver {
