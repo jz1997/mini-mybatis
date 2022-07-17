@@ -32,4 +32,18 @@ public class SimpleExecutor extends BaseExecutor {
             closeStatement(statement);
         }
     }
+
+    @Override
+    public int doInsert(MappedStatement ms, Object parameter) throws SQLException {
+        Statement statement = null;
+        try {
+            Configuration msConfiguration = ms.getConfiguration();
+            StatementHandler handler = msConfiguration.newStatementHandler(ms, parameter, EMPTY_RESULT_HANDLER);
+            statement = handler.prepare(transaction.getConnection());
+            handler.parameterize(statement, parameter);
+            return handler.insert(statement);
+        } finally {
+            closeStatement(statement);
+        }
+    }
 }

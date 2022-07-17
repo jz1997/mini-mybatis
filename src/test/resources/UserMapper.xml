@@ -25,4 +25,9 @@
         from user
         where username = #{username}
     </select>
+
+    <insert id="insert" parameterType="com.exmaple.small.mybatis.test.entity.User">
+        insert into user(id, username, nickname, password)
+        values (#{id}, #{username}, #{nickname}, #{password})
+    </insert>
 </mapper>

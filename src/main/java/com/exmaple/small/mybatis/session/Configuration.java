@@ -9,13 +9,11 @@ import com.exmaple.small.mybatis.executor.Executor;
 import com.exmaple.small.mybatis.executor.ResultHandler;
 import com.exmaple.small.mybatis.executor.SimpleExecutor;
 import com.exmaple.small.mybatis.executor.statement.PrepareStatementHandler;
-import com.exmaple.small.mybatis.executor.statement.SimpleStatementHandler;
 import com.exmaple.small.mybatis.executor.statement.StatementHandler;
 import com.exmaple.small.mybatis.mapping.Environment;
 import com.exmaple.small.mybatis.transaction.JdbcTransactionFactory;
 import com.exmaple.small.mybatis.transaction.Transaction;
 import com.exmaple.small.mybatis.type.TypeAliasRegistry;
-import com.exmaple.small.mybatis.type.TypeHandler;
 import com.exmaple.small.mybatis.type.TypeHandlerRegistry;
 
 import java.util.HashMap;

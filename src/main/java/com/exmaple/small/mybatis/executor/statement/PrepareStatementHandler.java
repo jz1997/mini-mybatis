@@ -27,14 +27,19 @@ public class PrepareStatementHandler extends BaseStatementHandler {
     @Override
     public <E> List<E> query(Statement statement, ResultHandler<E> resultHandler)
             throws SQLException {
-        try {
-            String sql = boundSql.getSql();
-            log.info("PrepareStatementHandler.query: sql={}", sql);
-            ((PreparedStatement) statement).execute();
-            return resultSetHandler.handleResultSet(statement);
-        } finally {
-            closeStatement(statement);
-        }
+        String sql = boundSql.getSql();
+        log.info("PrepareStatementHandler.query: sql={}", sql);
+        ((PreparedStatement) statement).execute();
+        return resultSetHandler.handleResultSet(statement);
+    }
+
+    @Override
+    public int insert(Statement statement) throws SQLException {
+        PreparedStatement ps = (PreparedStatement) statement;
+        String sql = boundSql.getSql();
+        log.info("PrepareStatementHandler.insert: sql={}", sql);
+        ps.execute();
+        return ps.getUpdateCount();
     }
 
     @Override

@@ -33,12 +33,9 @@ public abstract class BaseStatementHandler implements StatementHandler {
 
     @Override
     public Statement prepare(Connection connection) throws SQLException {
-        Statement statement = null;
         try {
-            statement = createStatement(connection);
-            return statement;
+            return createStatement(connection);
         } catch (SQLException e) {
-            closeStatement(statement);
             throw new SQLException("Error preparing statement. Cause: " + e, e);
         }
     }

@@ -27,6 +27,7 @@ public class GenericTokenParser {
             String replacementToken = tokenHandler.handleToken(property);
             matcher.appendReplacement(sb, replacementToken);
         }
+        matcher.appendTail(sb);
         String sql = sb.toString();
         return StrUtil.isBlank(sql) ? originalSql : sql;
     }

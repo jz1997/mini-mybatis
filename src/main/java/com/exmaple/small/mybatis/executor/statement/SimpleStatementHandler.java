@@ -2,6 +2,7 @@ package com.exmaple.small.mybatis.executor.statement;
 
 import com.exmaple.small.mybatis.binding.MappedStatement;
 import com.exmaple.small.mybatis.executor.ResultHandler;
+import lombok.SneakyThrows;
 
 import java.sql.Connection;
 import java.sql.SQLException;
@@ -23,13 +24,16 @@ public class SimpleStatementHandler extends BaseStatementHandler {
     @Override
     public <E> List<E> query(Statement statement, ResultHandler<E> resultHandler)
             throws SQLException {
-        try {
-            String sql = boundSql.getSql();
-            statement.execute(sql);
-            return resultSetHandler.handleResultSet(statement);
-        } finally {
-            closeStatement(statement);
-        }
+        String sql = boundSql.getSql();
+        statement.execute(sql);
+        return resultSetHandler.handleResultSet(statement);
+    }
+
+    @Override
+    public int insert(Statement statement) throws SQLException {
+        String sql = boundSql.getSql();
+        statement.execute(sql);
+        return statement.getUpdateCount();
     }
 
     @Override

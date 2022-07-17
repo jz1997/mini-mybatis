@@ -18,6 +18,8 @@ public interface Executor {
           MappedStatement ms, Object parameter, ResultHandler<E> resultHandler, BoundSql boundSql)
           throws SQLException;
 
+  int insert(MappedStatement ms, Object parameter) throws SQLException;
+
   Transaction getTransaction();
 
   void commit(boolean required) throws SQLException;

@@ -43,9 +43,19 @@ public abstract class BaseExecutor implements Executor {
     return doQuery(ms, parameter, resultHandler, boundSql);
   }
 
+  @Override
+  public int insert(MappedStatement ms, Object parameter) throws SQLException {
+    if (closed) {
+      throw new RuntimeException("Executor is closed.");
+    }
+    return doInsert(ms, parameter);
+  }
+
   public abstract <E> List<E> doQuery(
           MappedStatement ms, Object parameter, ResultHandler<E> resultHandler, BoundSql boundSql)
           throws SQLException;
+
+  public abstract int doInsert(MappedStatement ms, Object parameter) throws SQLException;
 
   @Override
   public Transaction getTransaction() {

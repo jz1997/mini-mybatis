@@ -82,4 +82,13 @@ public class PooledDataSourceTests {
         log.info("Find User: {}", user);
         Assertions.assertNotNull(user);
     }
+
+    @Test
+    public void test_insert() {
+        UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
+        User userToSave = User.builder().id("2").nickname("jzheng").username("jzheng").password("123456").build();
+        int updatedCount = userMapper.insert(userToSave);
+        log.info("Saved User Count: {}", updatedCount);
+        Assertions.assertNotEquals(0, updatedCount);
+    }
 }
