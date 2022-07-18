@@ -14,4 +14,8 @@ public interface UserMapper {
     User findOne(User user);
 
     List<User> findAll(User user);
+
+    int insert(User user);
+
+    int delete(@Param("id") String id);
 }

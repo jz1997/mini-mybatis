@@ -29,11 +29,8 @@ public class MapperProxy<T> implements InvocationHandler, Serializable {
         if (Objects.equals(Object.class, method.getDeclaringClass())) {
             return method.invoke(this, args);
         } else {
-            // convert args to sql param
-            Object namedParams = new ParamNameResolver(method).getNamedParams(args);
-            log.info("Parsed params object: {}", namedParams);
-            return sqlSession.<T>selectOne(
-                    mapperInterface.getName() + "." + method.getName(), namedParams);
+            MapperMethod mapperMethod = new MapperMethod(mapperInterface, method, sqlSession.getConfiguration());
+            return mapperMethod.execute(sqlSession, args);
         }
     }
 }

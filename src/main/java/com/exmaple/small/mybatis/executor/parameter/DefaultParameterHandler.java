@@ -27,7 +27,6 @@ public class DefaultParameterHandler implements ParameterHandler {
             MappedStatement mappedStatement, Configuration configuration, Object parameterObject) {
         Assert.notNull(mappedStatement, "MappedStatement cannot be null");
         Assert.notNull(configuration, "Configuration cannot be null");
-        Assert.notNull(parameterObject, "ParameterObject cannot be null");
         this.mappedStatement = mappedStatement;
         this.configuration = configuration;
         this.parameterObject = parameterObject;
@@ -39,6 +38,7 @@ public class DefaultParameterHandler implements ParameterHandler {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void setParameters(PreparedStatement ps) throws SQLException {
         BoundSql boundSql = this.mappedStatement.getSqlSource().getBoundSql(parameterObject);
         TypeHandlerRegistry typeHandlerRegistry = configuration.getTypeHandlerRegistry();
