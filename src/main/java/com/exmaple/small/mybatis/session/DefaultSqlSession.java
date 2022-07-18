@@ -56,6 +56,36 @@ public class DefaultSqlSession implements SqlSession {
         }
     }
 
+    @Override
+    public int update(String statement) {
+        return this.update(statement, null);
+    }
+
+    @Override
+    public int update(String statementId, Object params) {
+        MappedStatement ms = configuration.getMappedStatement(statementId);
+        try {
+            return executor.update(ms, params);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public int delete(String statementId) {
+        return this.delete(statementId, null);
+    }
+
+    @Override
+    public int delete(String statementId, Object params) {
+        MappedStatement ms = configuration.getMappedStatement(statementId);
+        try {
+            return executor.delete(ms, params);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     public <T> List<T> selectList(String statement, Object params) {

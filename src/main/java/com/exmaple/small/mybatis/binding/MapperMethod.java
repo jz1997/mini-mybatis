@@ -29,7 +29,8 @@ public class MapperMethod {
                 return sqlSession.insert(statementId, params);
             }
             case DELETE -> {
-                return null;
+                Object params = paramNameResolver.getNamedParams(args);
+                return sqlSession.delete(statementId, params);
             }
             case SELECT -> {
                 Class<?> returnType = method.getReturnType();
@@ -44,7 +45,8 @@ public class MapperMethod {
                 }
             }
             case UPDATE -> {
-                return null;
+                Object params = paramNameResolver.getNamedParams(args);
+                return sqlSession.update(statementId, params);
             }
             default -> {
                 throw new RuntimeException("Unknown sql command type: " + sqlCommandType);

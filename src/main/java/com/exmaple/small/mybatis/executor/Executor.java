@@ -12,21 +12,23 @@ import java.util.List;
  */
 public interface Executor {
 
-  ResultHandler EMPTY_RESULT_HANDLER = null;
+    ResultHandler EMPTY_RESULT_HANDLER = null;
 
-  <E> List<E> query(
-          MappedStatement ms, Object parameter, ResultHandler<E> resultHandler, BoundSql boundSql)
-          throws SQLException;
+    <E> List<E> query(MappedStatement ms, Object parameter, ResultHandler<E> resultHandler, BoundSql boundSql) throws SQLException;
 
-  int insert(MappedStatement ms, Object parameter) throws SQLException;
+    int insert(MappedStatement ms, Object parameter) throws SQLException;
 
-  Transaction getTransaction();
+    int update(MappedStatement ms, Object parameter) throws SQLException;
 
-  void commit(boolean required) throws SQLException;
+    int delete(MappedStatement ms, Object params) throws SQLException;
 
-  void rollback(boolean required) throws SQLException;
+    Transaction getTransaction();
 
-  void close(boolean forceRollback);
+    void commit(boolean required) throws SQLException;
 
-  boolean isClosed();
+    void rollback(boolean required) throws SQLException;
+
+    void close(boolean forceRollback);
+
+    boolean isClosed();
 }

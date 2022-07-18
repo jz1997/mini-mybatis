@@ -43,6 +43,24 @@ public class PrepareStatementHandler extends BaseStatementHandler {
     }
 
     @Override
+    public int update(Statement statement) throws SQLException {
+        PreparedStatement ps = (PreparedStatement) statement;
+        String sql = boundSql.getSql();
+        log.info("PrepareStatementHandler.update: sql={}", sql);
+        ps.execute();
+        return ps.getUpdateCount();
+    }
+
+    @Override
+    public int delete(Statement statement) throws SQLException {
+        PreparedStatement ps = (PreparedStatement) statement;
+        String sql = boundSql.getSql();
+        log.info("PrepareStatementHandler.delete: sql={}", sql);
+        ps.execute();
+        return statement.getUpdateCount();
+    }
+
+    @Override
     public void parameterize(Statement statement, Object parameter) throws SQLException {
         parameterHandler.setParameters((PreparedStatement) statement);
     }

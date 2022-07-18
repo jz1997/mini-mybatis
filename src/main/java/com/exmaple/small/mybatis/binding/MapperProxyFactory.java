@@ -14,8 +14,6 @@ public class MapperProxyFactory<T> {
     @SuppressWarnings("unchecked")
     public T newInstance(SqlSession sqlSession) {
         MapperProxy<T> proxy = new MapperProxy<>(sqlSession, mapperInterface);
-        return (T)
-                Proxy.newProxyInstance(
-                        mapperInterface.getClassLoader(), new Class[]{mapperInterface}, proxy);
+        return (T) Proxy.newProxyInstance(mapperInterface.getClassLoader(), new Class[]{mapperInterface}, proxy);
     }
 }

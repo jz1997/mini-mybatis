@@ -45,10 +45,7 @@ public class ParamNameResolver {
             return args[namesMap.firstKey()];
         } else {
             final Map<String, Object> namedParamsMap = new HashMap<>();
-            namesMap.forEach(
-                    (k, v) -> {
-                        namedParamsMap.put(v, args[k]);
-                    });
+            namesMap.forEach((k, v) -> namedParamsMap.put(v, args[k]));
             return namedParamsMap;
         }
     }

@@ -46,4 +46,22 @@ public class SimpleExecutor extends BaseExecutor {
             closeStatement(statement);
         }
     }
+
+    @Override
+    public int doUpdate(MappedStatement ms, Object parameter) throws SQLException {
+        Configuration msConfiguration = ms.getConfiguration();
+        StatementHandler handler = msConfiguration.newStatementHandler(ms, parameter, EMPTY_RESULT_HANDLER);
+        Statement statement = handler.prepare(transaction.getConnection());
+        handler.parameterize(statement, parameter);
+        return handler.update(statement);
+    }
+
+    @Override
+    public int doDelete(MappedStatement ms, Object parameter) throws SQLException {
+        Configuration msConfiguration = ms.getConfiguration();
+        StatementHandler handler = msConfiguration.newStatementHandler(ms, parameter, EMPTY_RESULT_HANDLER);
+        Statement statement = handler.prepare(transaction.getConnection());
+        handler.parameterize(statement, parameter);
+        return handler.delete(statement);
+    }
 }

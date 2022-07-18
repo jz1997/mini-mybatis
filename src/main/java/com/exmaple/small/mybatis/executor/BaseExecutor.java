@@ -18,105 +18,123 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public abstract class BaseExecutor implements Executor {
 
-  protected Configuration configuration;
+    protected Configuration configuration;
 
-  protected Transaction transaction;
+    protected Transaction transaction;
 
-  protected Executor executor;
+    protected Executor executor;
 
-  protected boolean closed;
+    protected boolean closed;
 
-  public BaseExecutor(Configuration configuration, Transaction transaction) {
-    this.configuration = configuration;
-    this.transaction = transaction;
-    this.executor = this;
-    this.closed = false;
-  }
-
-  @Override
-  public <E> List<E> query(
-          MappedStatement ms, Object parameter, ResultHandler<E> resultHandler, BoundSql boundSql)
-          throws SQLException {
-    if (closed) {
-      throw new RuntimeException("Executor is closed.");
-    }
-    return doQuery(ms, parameter, resultHandler, boundSql);
-  }
-
-  @Override
-  public int insert(MappedStatement ms, Object parameter) throws SQLException {
-    if (closed) {
-      throw new RuntimeException("Executor is closed.");
-    }
-    return doInsert(ms, parameter);
-  }
-
-  public abstract <E> List<E> doQuery(
-          MappedStatement ms, Object parameter, ResultHandler<E> resultHandler, BoundSql boundSql)
-          throws SQLException;
-
-  public abstract int doInsert(MappedStatement ms, Object parameter) throws SQLException;
-
-  @Override
-  public Transaction getTransaction() {
-    if (closed) {
-      throw new RuntimeException("Executor is closed.");
-    }
-    return transaction;
-  }
-
-  @Override
-  public void commit(boolean required) throws SQLException {
-    if (closed) {
-      throw new RuntimeException("Cannot commit, Transaction is closed.");
+    public BaseExecutor(Configuration configuration, Transaction transaction) {
+        this.configuration = configuration;
+        this.transaction = transaction;
+        this.executor = this;
+        this.closed = false;
     }
 
-    if (required) {
-      transaction.commit();
-    }
-  }
-
-  @Override
-  public void rollback(boolean required) throws SQLException {
-    if (closed) {
-      throw new RuntimeException("Cannot rollback, Transaction is closed.");
-    }
-
-    if (required) {
-      transaction.rollback();
-    }
-  }
-
-  @Override
-  public void close(boolean forceRollback) {
-    try {
-      try {
-        rollback(forceRollback);
-      } finally {
-        if (transaction != null) {
-          transaction.close();
+    @Override
+    public <E> List<E> query(
+            MappedStatement ms, Object parameter, ResultHandler<E> resultHandler, BoundSql boundSql)
+            throws SQLException {
+        if (closed) {
+            throw new RuntimeException("Executor is closed.");
         }
-      }
-    } catch (SQLException e) {
-      log.warn("Error closing transaction, Cause: ", e);
-    } finally {
-      closed = true;
+        return doQuery(ms, parameter, resultHandler, boundSql);
     }
-  }
 
-  @Override
-  public boolean isClosed() {
-    return closed;
-  }
-
-  protected synchronized void closeStatement(Statement statement) {
-    if (statement != null) {
-      try {
-        statement.close();
-        transaction.close();
-      } catch (SQLException e) {
-        throw new RuntimeException(e);
-      }
+    @Override
+    public int insert(MappedStatement ms, Object parameter) throws SQLException {
+        if (closed) {
+            throw new RuntimeException("Executor is closed.");
+        }
+        return doInsert(ms, parameter);
     }
-  }
+
+    @Override
+    public int update(MappedStatement ms, Object parameter) throws SQLException {
+        if (closed) {
+            throw new RuntimeException("Executor is closed.");
+        }
+        return doUpdate(ms, parameter);
+    }
+
+    @Override
+    public int delete(MappedStatement ms, Object params) throws SQLException {
+        if (closed) {
+            throw new RuntimeException("Executor is closed.");
+        }
+        return doDelete(ms, params);
+    }
+
+    public abstract <E> List<E> doQuery(MappedStatement ms, Object parameter, ResultHandler<E> resultHandler, BoundSql boundSql) throws SQLException;
+
+    public abstract int doInsert(MappedStatement ms, Object parameter) throws SQLException;
+
+    public abstract int doUpdate(MappedStatement ms, Object parameter) throws SQLException;
+
+    public abstract int doDelete(MappedStatement ms, Object parameter) throws SQLException;
+
+    @Override
+    public Transaction getTransaction() {
+        if (closed) {
+            throw new RuntimeException("Executor is closed.");
+        }
+        return transaction;
+    }
+
+    @Override
+    public void commit(boolean required) throws SQLException {
+        if (closed) {
+            throw new RuntimeException("Cannot commit, Transaction is closed.");
+        }
+
+        if (required) {
+            transaction.commit();
+        }
+    }
+
+    @Override
+    public void rollback(boolean required) throws SQLException {
+        if (closed) {
+            throw new RuntimeException("Cannot rollback, Transaction is closed.");
+        }
+
+        if (required) {
+            transaction.rollback();
+        }
+    }
+
+    @Override
+    public void close(boolean forceRollback) {
+        try {
+            try {
+                rollback(forceRollback);
+            } finally {
+                if (transaction != null) {
+                    transaction.close();
+                }
+            }
+        } catch (SQLException e) {
+            log.warn("Error closing transaction, Cause: ", e);
+        } finally {
+            closed = true;
+        }
+    }
+
+    @Override
+    public boolean isClosed() {
+        return closed;
+    }
+
+    protected synchronized void closeStatement(Statement statement) {
+        if (statement != null) {
+            try {
+                statement.close();
+                transaction.close();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
 }

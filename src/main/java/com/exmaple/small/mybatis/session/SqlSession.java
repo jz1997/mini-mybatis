@@ -1,6 +1,5 @@
 package com.exmaple.small.mybatis.session;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public interface SqlSession {
@@ -12,8 +11,15 @@ public interface SqlSession {
 
     int insert(String statement, Object params);
 
-    <T> List<T> selectList(String statement, Object parameter);
+    int update(String statement);
 
+    int update(String statementId, Object params);
+
+    int delete(String statementId);
+
+    int delete(String statementId, Object params);
+
+    <T> List<T> selectList(String statement, Object parameter);
 
     Configuration getConfiguration();
 
