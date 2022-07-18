@@ -5,7 +5,6 @@ import com.exmaple.small.mybatis.session.Configuration;
 import com.exmaple.small.mybatis.session.SqlSession;
 
 import java.lang.reflect.Method;
-import java.util.List;
 
 public class MapperMethod {
     private SqlCommandType sqlCommandType;
@@ -23,34 +22,6 @@ public class MapperMethod {
     }
 
     public Object execute(SqlSession sqlSession, Object[] args) {
-        switch (sqlCommandType) {
-            case INSERT -> {
-                Object params = paramNameResolver.getNamedParams(args);
-                return sqlSession.insert(statementId, params);
-            }
-            case DELETE -> {
-                Object params = paramNameResolver.getNamedParams(args);
-                return sqlSession.delete(statementId, params);
-            }
-            case SELECT -> {
-                Class<?> returnType = method.getReturnType();
-                if (List.class.isAssignableFrom(returnType)) {
-                    // select list
-                    Object params = this.paramNameResolver.getNamedParams(args);
-                    return sqlSession.selectList(statementId, params);
-                } else {
-                    // select one
-                    Object params = this.paramNameResolver.getNamedParams(args);
-                    return sqlSession.selectOne(statementId, params);
-                }
-            }
-            case UPDATE -> {
-                Object params = paramNameResolver.getNamedParams(args);
-                return sqlSession.update(statementId, params);
-            }
-            default -> {
-                throw new RuntimeException("Unknown sql command type: " + sqlCommandType);
-            }
-        }
+        return sqlCommandType.execute(sqlSession, method, statementId, args);
     }
 }
