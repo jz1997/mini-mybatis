@@ -1,25 +1,39 @@
 package com.mini.mybatis.datasource.connection;
 
+import cn.hutool.db.DbUtil;
 import com.mini.mybatis.datasource.PooledDataSource;
 import com.mini.mybatis.exception.DataSourceException;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
 import java.sql.SQLException;
 
 public class PooledConnection extends ConnectionWrapper {
     private PooledDataSource dataSource;
     private boolean isClosed;
 
-    public PooledConnection(PooledDataSource dataSource) {
+    public PooledConnection(PooledDataSource dataSource, Connection connection) {
         this.dataSource = dataSource;
         this.isClosed = false;
-        try {
-            super.realConnection = dataSource.getConnection();
-        } catch (SQLException e) {
-            throw new DataSourceException("获取数据源链接失败, 原因: " + e.getMessage(), e);
-        }
+        this.realConnection = connection;
     }
 
+    public void open() {
+        this.isClosed = false;
+    }
 
+    /**
+     * 关闭 Connection 连接
+     */
+    public void release() {
+        DbUtil.close(this.realConnection);
+    }
+
+    /**
+     * 重写 close 方法, 将本链接防止到数据源中的连接池中
+     *
+     * @throws SQLException /
+     */
     @Override
     public void close() throws SQLException {
         // 连接关闭放回连接池中
@@ -32,8 +46,4 @@ public class PooledConnection extends ConnectionWrapper {
         return isClosed || realConnection.isClosed();
     }
 
-    public PooledConnection open() {
-        this.isClosed = false;
-        return this;
-    }
 }

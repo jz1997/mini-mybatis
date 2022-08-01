@@ -12,9 +12,9 @@ public class SimpleDataSourceFactory implements DataSourceFactory {
     /**
      * 对 DataSource 的配置 键名前缀
      */
-    private static final String DRIVER_PROPERTY_PREFIX = "driver.";
+    protected static final String DRIVER_PROPERTY_PREFIX = "driver.";
 
-    private final DataSource dataSource;
+    protected DataSource dataSource;
 
     public SimpleDataSourceFactory() {
         dataSource = new SimpleDataSource();
