@@ -13,7 +13,7 @@ import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
-public abstract class AbstractDataSource implements DataSource, Cloneable, Closeable {
+public abstract class AbstractDataSource implements DataSource, Closeable {
     // 已经注册的驱动
     protected static final Map<String, Driver> registeredDrivers = new ConcurrentHashMap<>();
     // 数据源驱动
