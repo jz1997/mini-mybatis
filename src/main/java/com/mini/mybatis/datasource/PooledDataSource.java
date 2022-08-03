@@ -19,14 +19,19 @@ public class PooledDataSource extends SimpleDataSource {
 
     private final static Logger log = LoggerFactory.getLogger(PooledDataSource.class);
 
+    // 获取连接的等待时间 毫秒
     private int poolTimeToWait = 20000;
+
+    // 最大的闲置连接数
     private int maxIdleConnections = 10;
+
+    // 最大的活动链接数
     private int maxActiveConnections = 20;
+
+    // 记录当前的链接数
     private int activeConnections = 0;
 
-    /**
-     * 数据源
-     */
+    // 数据源连接池
     private final Deque<PooledConnection> connectionPool = new ArrayDeque<>();
 
     public PooledDataSource() {
@@ -57,6 +62,14 @@ public class PooledDataSource extends SimpleDataSource {
     }
 
 
+    /**
+     * 如果连接池中存在空闲线程, 则从连接池中获取连接, 否则判断是否可以创建新线程
+     * 如果可以创建, 则创建新线程, 否则等待
+     *
+     * @param properties 数据源相关配置
+     * @return /
+     * @throws SQLException /
+     */
     @Override
     protected Connection doGetConnection(Properties properties) throws SQLException {
         PooledConnection returnConnection = null;
@@ -130,5 +143,4 @@ public class PooledDataSource extends SimpleDataSource {
             connectionPool.clear();
         }
     }
-
 }
