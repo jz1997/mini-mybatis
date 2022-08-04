@@ -13,12 +13,18 @@ import java.util.Properties;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Logger;
 
-public abstract class AbstractDataSource implements DataSource, Cloneable, Closeable {
+public abstract class AbstractDataSource implements DataSource, Closeable {
+    // 已经注册的驱动
     protected static final Map<String, Driver> registeredDrivers = new ConcurrentHashMap<>();
+    // 数据源驱动
     protected String driver;
+    // 数据库连接 url
     protected String url;
+    // 用户名
     protected String username;
+    // 密码
     protected String password;
+    // 数据源额外配置
     protected Properties driverProperties;
 
     // 加载已注册驱动
@@ -31,7 +37,7 @@ public abstract class AbstractDataSource implements DataSource, Cloneable, Close
     }
 
     /**
-     * 注册数据源驱动
+     * 如果当前数据源的驱动没有注册的话就注册数据源驱动
      */
     private void initDriver() {
         if (!registeredDrivers.containsKey(driver)) {
@@ -59,6 +65,14 @@ public abstract class AbstractDataSource implements DataSource, Cloneable, Close
         return doGetConnection(username, password);
     }
 
+    /**
+     * 尝试加载数据源驱动, 并将用户名、密码和数据源额外配置设置为一个 Properties 对象
+     *
+     * @param username 用户名
+     * @param password 密码
+     * @return 数据库连接
+     * @throws SQLException /
+     */
     protected Connection doGetConnection(String username, String password) throws SQLException {
         initDriver();
 
@@ -79,6 +93,13 @@ public abstract class AbstractDataSource implements DataSource, Cloneable, Close
     }
 
 
+    /**
+     * 实际获取Connection 的抽象方法，等待子类实现
+     *
+     * @param properties 数据源相关的属性, user, password 等等
+     * @return {@link Connection} /
+     * @throws SQLException /
+     */
     protected abstract Connection doGetConnection(Properties properties) throws SQLException;
 
     @Override
