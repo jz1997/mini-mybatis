@@ -4,17 +4,15 @@ public class MapperStatement {
     // namespace + "." + id
     private String id;
 
-    // mapper/UserMapper.xml
+    // com.mini.mybatis.mapper.UserMapper
     private String namespace;
-
-    private String parameterType;
-
-    private String resultType;
-
 
     // sql content
     private String sql;
 
+    private String parameterType;
+
+    private String resultType;
 
     public MapperStatement(String id, String namespace, String parameterType, String resultType, String sql) {
         this.id = id;

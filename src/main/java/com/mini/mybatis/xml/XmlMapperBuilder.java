@@ -11,10 +11,16 @@ import org.w3c.dom.Element;
 import java.util.List;
 
 public class XmlMapperBuilder extends BaseBuilder {
-
+    // mapper.xml 文件地址
     private final String resource;
+
+    // mapper.xml 文件的总结点
     private final Element root;
+
+    // mapper.xml 中 mapper 节点中的 namespace 属性
     private String namespace;
+
+    // sql 操作节点名称
     private final String[] commandTagNames = {"select", "insert", "update", "delete"};
 
     public XmlMapperBuilder(Configuration configuration, String resource) {

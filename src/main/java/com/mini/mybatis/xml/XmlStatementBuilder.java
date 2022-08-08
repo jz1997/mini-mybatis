@@ -1,20 +1,21 @@
 package com.mini.mybatis.xml;
 
 import cn.hutool.core.util.StrUtil;
+import com.mini.mybatis.builder.BaseBuilder;
 import com.mini.mybatis.exception.XmlParseException;
 import com.mini.mybatis.session.Configuration;
 import org.w3c.dom.Element;
 
-public class XmlStatementBuilder {
+public class XmlStatementBuilder extends BaseBuilder {
 
-    private Configuration configuration;
+    // com.mini.mybatis.mapper.UserMapper
+    private final String namespace;
 
-    private String namespace;
-
-    private Element element;
+    // sql 命令节点 insert, update, select, delete
+    private final Element element;
 
     public XmlStatementBuilder(Configuration configuration, String namespace, Element element) {
-        this.configuration = configuration;
+        super(configuration);
         this.namespace = namespace;
         this.element = element;
     }
