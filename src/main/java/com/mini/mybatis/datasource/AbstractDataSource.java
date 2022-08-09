@@ -102,6 +102,26 @@ public abstract class AbstractDataSource implements DataSource, Closeable {
      */
     protected abstract Connection doGetConnection(Properties properties) throws SQLException;
 
+    public String getDriver() {
+        return driver;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public Properties getDriverProperties() {
+        return driverProperties;
+    }
+
     @Override
     public PrintWriter getLogWriter() throws SQLException {
         return DriverManager.getLogWriter();
