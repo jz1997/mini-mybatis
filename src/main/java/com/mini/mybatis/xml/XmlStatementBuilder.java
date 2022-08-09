@@ -24,6 +24,8 @@ public class XmlStatementBuilder extends BaseBuilder {
         String id = element.getAttribute("id");
         String parameterType = element.getAttribute("parameterType");
         String resultType = element.getAttribute("resultType");
+
+        // todo: parse sql source
         String sql = element.getTextContent();
 
         if (StrUtil.isBlank(id)) {
@@ -42,9 +44,12 @@ public class XmlStatementBuilder extends BaseBuilder {
             throw new XmlParseException("sql 操作节点中的 sql 内容不能为空, Mapper: " + this.namespace + ", id: " + id);
         }
 
-
-        MapperStatement ms = new MapperStatement(namespace + "." + id, namespace, parameterType, resultType, sql);
+        MapperStatement ms = new MapperStatement(buildMapperStatementId(id), namespace, parameterType, resultType, sql);
         // todo: 实现 mapper statement registry
         configuration.addMapperStatement(ms);
+    }
+
+    private String buildMapperStatementId(String id) {
+        return namespace + "." + id;
     }
 }

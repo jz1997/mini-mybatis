@@ -22,7 +22,10 @@ import java.util.Properties;
 
 public class XmlConfigBuilder extends BaseBuilder {
 
+    // 总结点
     private final Element root;
+
+    // 默认环境 ID
     private String environment;
 
     public XmlConfigBuilder(Reader reader) {
@@ -36,21 +39,28 @@ public class XmlConfigBuilder extends BaseBuilder {
     }
 
     public void parse() {
+        // 解析 environments 节点
         parseEnvironmentsElement(XmlUtil.getElement(root, "environments"));
+        // 解析 mappers 节点
         parseMappersElement(XmlUtil.getElement(root, "mappers"));
     }
 
+    /**
+     * 解析 elements 节点
+     *
+     * @param environmentsElement /
+     */
     private void parseEnvironmentsElement(Element environmentsElement) {
         if (environmentsElement == null) {
             throw new XmlParseException("Environments 节点不能为空");
         }
 
-        // get default attribute value
+        // 获取默认环境 ID
         environment = environmentsElement.getAttribute("default");
 
+        // 获取默认环境并进行解析
         List<Element> environmentElements = XmlUtil.getElements(environmentsElement, "environment");
         checkHasDefaultEnvironment(environmentElements);
-
         for (Element environmentElement : environmentElements) {
             String environmentId = environmentElement.getAttribute("id");
             if (Objects.equals(environmentId, environment)) {
@@ -70,6 +80,12 @@ public class XmlConfigBuilder extends BaseBuilder {
         }
     }
 
+    /**
+     * 解析 environment 节点, 包括数据源, 事务等配置信息
+     *
+     * @param environmentElement /
+     * @return /
+     */
     private Environment parseEnvironmentElement(Element environmentElement) {
         Element transactionManagerElement = XmlUtil.getElement(environmentElement, "transactionManager");
         TransactionFactory transactionFactory = parseTransactionManagerElement(transactionManagerElement);
@@ -138,7 +154,7 @@ public class XmlConfigBuilder extends BaseBuilder {
 
 
     /**
-     * XML 子节点列表中的 name 和 value 标签封装为 Properties 对象
+     * 将指定节点的下属 property 节点转化为 Properties 对象
      */
     private static Properties childElementsToProperties(Element element) {
         List<Element> propertyElements = XmlUtil.getElements(element, "property");
@@ -146,6 +162,13 @@ public class XmlConfigBuilder extends BaseBuilder {
         propertyElements.forEach(e -> {
             String name = e.getAttribute("name");
             String value = e.getAttribute("value");
+            if (StrUtil.isBlank(name) || StrUtil.isBlank(value)) {
+                throw new XmlParseException("property 节点中的 name 和 value 属性不能缺省");
+            }
+
+            if (properties.get(name) != null) {
+                throw new XmlParseException("property 节点中的 name 属性不能重复");
+            }
             properties.put(name, value);
         });
         return properties;

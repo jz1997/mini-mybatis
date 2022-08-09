@@ -40,6 +40,7 @@ public class XmlMapperBuilder extends BaseBuilder {
             return;
         }
 
+        // 注册已经解析的 mapper xml 文件
         configuration.registryMapperResource(this.resource);
 
         this.namespace = root.getAttribute("namespace");
@@ -50,9 +51,13 @@ public class XmlMapperBuilder extends BaseBuilder {
         // register mapper class
         registerMapper();
 
+        // 解析 sql 指令节点
         parseSqlCommandElement();
     }
 
+    /**
+     * 注册 Mapper Class
+     */
     private void registerMapper() {
         try {
             Class<?> mapperClass = Class.forName(this.namespace);
@@ -62,7 +67,9 @@ public class XmlMapperBuilder extends BaseBuilder {
         }
     }
 
-    // 解析 sql 命令节点, select, update, delete, update
+    /**
+     * 解析 sql 命令节点, select, update, delete, insert
+     */
     private void parseSqlCommandElement() {
         for (String commandTagName : commandTagNames) {
             List<Element> elements = XmlUtil.getElements(this.root, commandTagName);
