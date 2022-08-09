@@ -137,9 +137,11 @@ public class XmlConfigBuilder extends BaseBuilder {
     }
 
 
-    // XML 子节点列表中的 name 和 value 标签封装为 Properties 对象
+    /**
+     * XML 子节点列表中的 name 和 value 标签封装为 Properties 对象
+     */
     private static Properties childElementsToProperties(Element element) {
-        List<Element> propertyElements = XmlUtil.getElements(element, null);
+        List<Element> propertyElements = XmlUtil.getElements(element, "property");
         final Properties properties = new Properties();
         propertyElements.forEach(e -> {
             String name = e.getAttribute("name");
