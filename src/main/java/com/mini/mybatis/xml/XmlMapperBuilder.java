@@ -40,7 +40,7 @@ public class XmlMapperBuilder extends BaseBuilder {
             return;
         }
 
-        configuration.loadMapperResource(this.resource);
+        configuration.registryMapperResource(this.resource);
 
         this.namespace = root.getAttribute("namespace");
         if (StrUtil.isBlank(this.namespace)) {
