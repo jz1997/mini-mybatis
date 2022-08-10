@@ -1,6 +1,6 @@
-package com.mini.mybatis.xml;
+package com.mini.mybatis.mapping;
 
-public class MapperStatement {
+public class MappedStatement {
     // namespace + "." + id
     private String id;
 
@@ -14,11 +14,16 @@ public class MapperStatement {
 
     private String resultType;
 
-    public MapperStatement(String id, String namespace, String parameterType, String resultType, String sql) {
+    public MappedStatement(String id, String namespace, String parameterType, String resultType, String sql) {
         this.id = id;
         this.namespace = namespace;
         this.parameterType = parameterType;
         this.resultType = resultType;
         this.sql = sql;
+    }
+
+
+    public String getId() {
+        return id;
     }
 }

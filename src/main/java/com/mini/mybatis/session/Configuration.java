@@ -3,10 +3,11 @@ package com.mini.mybatis.session;
 import com.mini.mybatis.datasource.factory.PooledDataSourceFactory;
 import com.mini.mybatis.datasource.factory.SimpleDataSourceFactory;
 import com.mini.mybatis.mapper.MapperRegistry;
+import com.mini.mybatis.mapping.MappedStatementRegistry;
 import com.mini.mybatis.transaction.JdbcTransactionFactory;
 import com.mini.mybatis.type.TypeAliasRegistry;
 import com.mini.mybatis.type.TypeHandlerRegistry;
-import com.mini.mybatis.xml.MapperStatement;
+import com.mini.mybatis.mapping.MappedStatement;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -18,6 +19,8 @@ public class Configuration {
     private final Set<String> alreadyLoadedMapper = new HashSet<>();
     // Mapper 注册机
     private final MapperRegistry mapperRegistry = new MapperRegistry();
+    // MappedStatement 注册机
+    private final MappedStatementRegistry mappedStatementRegistry = new MappedStatementRegistry();
     // 类型注册器
     private final TypeAliasRegistry typeAliasRegistry = new TypeAliasRegistry();
     // 类型转换注册器
@@ -55,13 +58,12 @@ public class Configuration {
      *
      * @param ms /
      */
-    public void addMapperStatement(MapperStatement ms) {
-        // todo: register mapper statement
+    public void addMapperStatement(MappedStatement ms) {
+        mappedStatementRegistry.addMappedStatement(ms);
     }
 
-    public MapperStatement getMapperStatement(String id) {
-        // todo: get mapper statement by id
-        return null;
+    public MappedStatement getMapperStatement(String id) {
+        return mappedStatementRegistry.getMappedStatement(id);
     }
 
     public TypeAliasRegistry getTypeAliasRegistry() {

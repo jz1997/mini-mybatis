@@ -3,6 +3,7 @@ package com.mini.mybatis.xml;
 import cn.hutool.core.util.StrUtil;
 import com.mini.mybatis.builder.BaseBuilder;
 import com.mini.mybatis.exception.XmlParseException;
+import com.mini.mybatis.mapping.MappedStatement;
 import com.mini.mybatis.session.Configuration;
 import org.w3c.dom.Element;
 
@@ -44,8 +45,7 @@ public class XmlStatementBuilder extends BaseBuilder {
             throw new XmlParseException("sql 操作节点中的 sql 内容不能为空, Mapper: " + this.namespace + ", id: " + id);
         }
 
-        MapperStatement ms = new MapperStatement(buildMapperStatementId(id), namespace, parameterType, resultType, sql);
-        // todo: 实现 mapper statement registry
+        MappedStatement ms = new MappedStatement(buildMapperStatementId(id), namespace, parameterType, resultType, sql);
         configuration.addMapperStatement(ms);
     }
 
