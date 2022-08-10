@@ -2,6 +2,7 @@ package com.mini.mybatis.session;
 
 import com.mini.mybatis.datasource.factory.PooledDataSourceFactory;
 import com.mini.mybatis.datasource.factory.SimpleDataSourceFactory;
+import com.mini.mybatis.mapper.MapperRegistry;
 import com.mini.mybatis.transaction.JdbcTransactionFactory;
 import com.mini.mybatis.type.TypeAliasRegistry;
 import com.mini.mybatis.type.TypeHandlerRegistry;
@@ -14,11 +15,13 @@ public class Configuration {
     // 数据源环境配置
     private Environment environment;
     // 已经记载的 mapper 资源文件
-    private Set<String> alreadyLoadedMapper = new HashSet<>();
+    private final Set<String> alreadyLoadedMapper = new HashSet<>();
+    // Mapper 注册机
+    private final MapperRegistry mapperRegistry = new MapperRegistry();
     // 类型注册器
-    private TypeAliasRegistry typeAliasRegistry = new TypeAliasRegistry();
+    private final TypeAliasRegistry typeAliasRegistry = new TypeAliasRegistry();
     // 类型转换注册器
-    private TypeHandlerRegistry typeHandlerRegistry = new TypeHandlerRegistry();
+    private final TypeHandlerRegistry typeHandlerRegistry = new TypeHandlerRegistry();
 
     public Configuration() {
         // register transaction factory
@@ -40,15 +43,25 @@ public class Configuration {
      * @param mapperClass 例如 UserMapper.class
      */
     public void addMapper(Class<?> mapperClass) {
-        // todo: register mapper
+        mapperRegistry.addMapper(mapperClass);
+    }
+
+    public <T> T getMapper(Class<T> mapperClass, SqlSession sqlSession) {
+        return mapperRegistry.getMapper(mapperClass, sqlSession);
     }
 
     /**
      * 注册 mapper.xml 中解析的 SQL 节点信息
+     *
      * @param ms /
      */
     public void addMapperStatement(MapperStatement ms) {
         // todo: register mapper statement
+    }
+
+    public MapperStatement getMapperStatement(String id) {
+        // todo: get mapper statement by id
+        return null;
     }
 
     public TypeAliasRegistry getTypeAliasRegistry() {
