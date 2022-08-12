@@ -29,7 +29,12 @@ public class DefaultSqlSession implements SqlSession {
 
     @Override
     public <T> T selectOne(String statement) {
-        List<T> objects = this.<T>selectList(statement);
+        return this.selectOne(statement, null);
+    }
+
+    @Override
+    public <T> T selectOne(String statement, Object parameter) {
+        List<T> objects = this.selectList(statement, parameter);
         if (objects.size() > 1) {
             throw new RuntimeException("selectOne 查询出多个结果");
         } else if (objects.size() == 0) {
@@ -37,11 +42,6 @@ public class DefaultSqlSession implements SqlSession {
         } else {
             return objects.get(0);
         }
-    }
-
-    @Override
-    public <T> T selectOne(String statement, Object parameter) {
-        return null;
     }
 
     @Override
@@ -53,6 +53,7 @@ public class DefaultSqlSession implements SqlSession {
     @SuppressWarnings("unchecked")
     public <E> List<E> selectList(String statement, Object parameter) {
         logger.info("into selectOne method, statement is '{}'", statement);
+        // todo: 执行过程待封装
         MappedStatement ms = configuration.getMapperStatement(statement);
         String sql = ms.getSql();
         sql = sql.replaceAll("#\\{id}", "?");
@@ -73,7 +74,15 @@ public class DefaultSqlSession implements SqlSession {
         }
     }
 
+    /**
+     * 将 ResultSet 转化成 resultType 类型的对象
+     *
+     * @param ms        {@link MappedStatement} /
+     * @param resultSet {@link ResultSet} /
+     * @return /
+     */
     private List<Object> handlerResult(MappedStatement ms, ResultSet resultSet) {
+        // todo: 结果集处理进行封装
         List<Object> results = new ArrayList<>();
 
         try {
@@ -81,6 +90,7 @@ public class DefaultSqlSession implements SqlSession {
             Class<?> objClass = Class.forName(resultType);
             Object obj = objClass.getConstructor().newInstance();
             while (resultSet.next()) {
+                // 通过反射进行属性的设值
                 Field[] fields = ReflectUtil.getFields(objClass);
                 for (Field field : fields) {
                     ReflectUtil.setFieldValue(obj, field.getName(), resultSet.getObject(field.getName()));

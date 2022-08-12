@@ -16571,7 +16571,24 @@
 											"top": 347,
 											"width": 474.23956298828125,
 											"height": 13,
-											"text": "+addMapperStatement(statement: MapperStatement)",
+											"text": "+addMappedStatement(statement: MapperStatement)",
+											"horizontalAlignment": 0
+										},
+										{
+											"_type": "UMLOperationView",
+											"_id": "AAAAAAGCkPPTw8qp8QQ=",
+											"_parent": {
+												"$ref": "AAAAAAGCh+rypbPr31w="
+											},
+											"model": {
+												"$ref": "AAAAAAGCjSqxTspJ8Bc="
+											},
+											"font": "MonoLisa;13;0",
+											"left": 477,
+											"top": 362,
+											"width": 474.23956298828125,
+											"height": 13,
+											"text": "+getMappedStatement(statement: String)",
 											"horizontalAlignment": 0
 										}
 									],
@@ -16579,7 +16596,7 @@
 									"left": 472,
 									"top": 282,
 									"width": 484.23956298828125,
-									"height": 83
+									"height": 98
 								},
 								{
 									"_type": "UMLReceptionCompartmentView",
@@ -16619,7 +16636,7 @@
 							"left": 472,
 							"top": 144,
 							"width": 484.23956298828125,
-							"height": 221,
+							"height": 236,
 							"showNamespace": true,
 							"nameCompartment": {
 								"$ref": "AAAAAAGCh+rypbPlLyM="
@@ -17264,7 +17281,7 @@
 									"visible": false,
 									"font": "MonoLisa;13;0",
 									"left": 728,
-									"top": 415,
+									"top": 422,
 									"height": 13,
 									"alpha": 1.5707963267948966,
 									"distance": 15,
@@ -17285,7 +17302,7 @@
 									"visible": null,
 									"font": "MonoLisa;13;0",
 									"left": 743,
-									"top": 415,
+									"top": 422,
 									"height": 13,
 									"alpha": 1.5707963267948966,
 									"distance": 30,
@@ -17306,7 +17323,7 @@
 									"visible": false,
 									"font": "MonoLisa;13;0",
 									"left": 699,
-									"top": 416,
+									"top": 423,
 									"height": 13,
 									"alpha": -1.5707963267948966,
 									"distance": 15,
@@ -17324,7 +17341,7 @@
 								"$ref": "AAAAAAGCh+rypbPk1XI="
 							},
 							"lineStyle": 1,
-							"points": "714:365;715:479",
+							"points": "714:380;715:479",
 							"showVisibility": true,
 							"nameLabel": {
 								"$ref": "AAAAAAGCh+xTi7SvGUI="

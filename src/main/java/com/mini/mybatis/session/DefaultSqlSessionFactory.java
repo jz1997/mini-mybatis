@@ -10,6 +10,11 @@ public class DefaultSqlSessionFactory implements SqlSessionFactory {
         this.configuration = configuration;
     }
 
+    /**
+     * 通过配置文件中的 transaction 和 dataSource 构建 DefaultSqlSession
+     *
+     * @return /
+     */
     @Override
     public SqlSession openSession() {
         Environment environment = configuration.getEnvironment();
