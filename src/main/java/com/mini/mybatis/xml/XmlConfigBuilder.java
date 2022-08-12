@@ -38,11 +38,12 @@ public class XmlConfigBuilder extends BaseBuilder {
         }
     }
 
-    public void parse() {
+    public Configuration parse() {
         // 解析 environments 节点
         parseEnvironmentsElement(XmlUtil.getElement(root, "environments"));
         // 解析 mappers 节点
         parseMappersElement(XmlUtil.getElement(root, "mappers"));
+        return configuration;
     }
 
     /**

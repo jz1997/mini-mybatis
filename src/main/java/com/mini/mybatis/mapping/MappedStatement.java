@@ -1,17 +1,32 @@
 package com.mini.mybatis.mapping;
 
 public class MappedStatement {
-    // namespace + "." + id
+    /**
+     * Mapper 接口方法中的全路径你
+     * com.mini.mybatis.mapper.UserMapper.selectByPrimaryKey
+     */
     private String id;
 
-    // com.mini.mybatis.mapper.UserMapper
+    /**
+     * Mapper 接口路径
+     * com.mini.mybatis.mapper.UserMapper
+     */
+
     private String namespace;
 
-    // sql content
+    /**
+     * SQL 语句
+     */
     private String sql;
 
+    /**
+     * 参数类型
+     */
     private String parameterType;
 
+    /**
+     * 返回值类型
+     */
     private String resultType;
 
     public MappedStatement(String id, String namespace, String parameterType, String resultType, String sql) {
@@ -25,5 +40,21 @@ public class MappedStatement {
 
     public String getId() {
         return id;
+    }
+
+    public String getNamespace() {
+        return namespace;
+    }
+
+    public String getSql() {
+        return sql;
+    }
+
+    public String getParameterType() {
+        return parameterType;
+    }
+
+    public String getResultType() {
+        return resultType;
     }
 }
