@@ -25,27 +25,25 @@ public class XmlStatementBuilder extends BaseBuilder {
         String id = element.getAttribute("id");
         String parameterType = element.getAttribute("parameterType");
         String resultType = element.getAttribute("resultType");
-
-        // todo: parse sql source
-        String sql = element.getTextContent();
+        String originalSql = element.getTextContent();
 
         if (StrUtil.isBlank(id)) {
-            throw new XmlParseException("sql 操作节点中的 id 属性不能为空, Mapper: " + this.namespace + ", id: " + id);
+            throw new XmlParseException("originalSql 操作节点中的 id 属性不能为空, Mapper: " + this.namespace + ", id: " + id);
         }
 
         if (StrUtil.isBlank(parameterType)) {
-            throw new XmlParseException("sql 操作节点中的 parameterType 属性不能为空, Mapper: " + this.namespace + ", id: " + id);
+            throw new XmlParseException("originalSql 操作节点中的 parameterType 属性不能为空, Mapper: " + this.namespace + ", id: " + id);
         }
 
         if (StrUtil.isBlank(resultType)) {
-            throw new XmlParseException("sql 操作节点中的 resultType 属性不能为空, Mapper: " + this.namespace + ", id: " + id);
+            throw new XmlParseException("originalSql 操作节点中的 resultType 属性不能为空, Mapper: " + this.namespace + ", id: " + id);
         }
 
-        if (StrUtil.isBlank(sql)) {
-            throw new XmlParseException("sql 操作节点中的 sql 内容不能为空, Mapper: " + this.namespace + ", id: " + id);
+        if (StrUtil.isBlank(originalSql)) {
+            throw new XmlParseException("originalSql 操作节点中的 originalSql 内容不能为空, Mapper: " + this.namespace + ", id: " + id);
         }
 
-        MappedStatement ms = new MappedStatement(buildMapperStatementId(id), namespace, parameterType, resultType, sql);
+        MappedStatement ms = new MappedStatement(configuration, buildMapperStatementId(id), namespace, parameterType, resultType, originalSql);
         configuration.addMapperStatement(ms);
     }
 

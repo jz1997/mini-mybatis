@@ -1,6 +1,15 @@
 package com.mini.mybatis.mapping;
 
+import com.mini.mybatis.session.Configuration;
+import com.mini.mybatis.session.SqlSource;
+import com.mini.mybatis.session.SqlSourceBuilder;
+import lombok.Getter;
+
+@Getter
 public class MappedStatement {
+
+    private Configuration configuration;
+
     /**
      * Mapper 接口方法中的全路径你
      * com.mini.mybatis.mapper.UserMapper.selectByPrimaryKey
@@ -17,7 +26,7 @@ public class MappedStatement {
     /**
      * SQL 语句
      */
-    private String sql;
+    private SqlSource sqlSource;
 
     /**
      * 参数类型
@@ -29,32 +38,16 @@ public class MappedStatement {
      */
     private String resultType;
 
-    public MappedStatement(String id, String namespace, String parameterType, String resultType, String sql) {
-        this.id = id;
-        this.namespace = namespace;
-        this.parameterType = parameterType;
-        this.resultType = resultType;
-        this.sql = sql;
-    }
-
-
-    public String getId() {
-        return id;
-    }
-
-    public String getNamespace() {
-        return namespace;
-    }
-
-    public String getSql() {
-        return sql;
-    }
-
-    public String getParameterType() {
-        return parameterType;
-    }
-
-    public String getResultType() {
-        return resultType;
+    public MappedStatement(Configuration configuration, String id, String namespace, String parameterType, String resultType, String originalSql) {
+        try {
+            this.configuration = configuration;
+            this.id = id;
+            this.namespace = namespace;
+            this.parameterType = parameterType;
+            this.resultType = resultType;
+            this.sqlSource = new SqlSourceBuilder(configuration).build(originalSql, Class.forName(parameterType));
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
