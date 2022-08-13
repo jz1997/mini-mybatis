@@ -1,5 +1,6 @@
 package com.mini.mybatis.mapper;
 
+import com.mini.mybatis.mapping.ParameterNameResolver;
 import com.mini.mybatis.session.SqlSession;
 
 import java.lang.reflect.InvocationHandler;
@@ -22,7 +23,8 @@ public class MapperProxy<T> implements InvocationHandler {
             return method.invoke(this, args);
         } else {
             // todo: 后续修改为根据 操作类型实现不同的操作
-            return sqlSession.selectOne(mapperClass.getName() + "." + method.getName());
+            ParameterNameResolver parameterNameResolver = new ParameterNameResolver(method);
+            return sqlSession.selectOne(mapperClass.getName() + "." + method.getName(), parameterNameResolver.parse(args));
         }
     }
 }
