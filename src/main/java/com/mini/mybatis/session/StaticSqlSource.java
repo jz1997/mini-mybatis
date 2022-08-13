@@ -1,11 +1,14 @@
 package com.mini.mybatis.session;
 
 import com.mini.mybatis.parsing.ParameterMapping;
+import lombok.Getter;
 
 import java.util.List;
 
+@Getter
 public class StaticSqlSource implements SqlSource {
 
+    // 可能含有占位符的可执行 SQL 语句
     private String sql;
 
     private List<ParameterMapping> parameterMappings;

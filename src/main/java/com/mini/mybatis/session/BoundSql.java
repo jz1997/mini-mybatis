@@ -11,6 +11,7 @@ import java.util.List;
 @Setter
 @Builder
 public class BoundSql {
+    // 包含 ? 的可执行 SQL 语句
     private String sql;
     private List<ParameterMapping> parameterMappings;
     private Object parameterObject;
