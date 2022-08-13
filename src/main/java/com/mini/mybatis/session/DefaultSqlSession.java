@@ -55,7 +55,9 @@ public class DefaultSqlSession implements SqlSession {
         logger.info("into selectOne method, statement is '{}'", statement);
         // todo: 执行过程待封装
         MappedStatement ms = configuration.getMapperStatement(statement);
-        String sql = ms.getSql();
+        SqlSource sqlSource = ms.getSqlSource();
+        BoundSql bondSql = sqlSource.getBondSql(parameter);
+        String sql = bondSql.getSql();
         sql = sql.replaceAll("#\\{id}", "?");
         logger.info("sql: {}" + sql);
         logger.info("parameter: {}", parameter.toString());
