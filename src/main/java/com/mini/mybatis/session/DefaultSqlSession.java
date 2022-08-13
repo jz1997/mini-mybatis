@@ -58,6 +58,7 @@ public class DefaultSqlSession implements SqlSession {
         String sql = ms.getSql();
         sql = sql.replaceAll("#\\{id}", "?");
         logger.info("sql: {}" + sql);
+        logger.info("parameter: {}", parameter.toString());
         PreparedStatement ps = null;
         try {
             Connection connection = transaction.getConnection();
