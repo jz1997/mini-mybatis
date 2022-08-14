@@ -11,6 +11,7 @@ import java.util.Map;
 
 public class ParameterNameResolver {
     private Map<Integer, String> indexNameMap = null;
+    private boolean hasParamAnno = false;
     private final String PARAM_PREFIX = "param_";
 
     public ParameterNameResolver(Method method) {
@@ -33,6 +34,7 @@ public class ParameterNameResolver {
             for (Annotation annotation : annotations) {
                 if (annotation instanceof Param) {
                     name = ((Param) annotation).value();
+                    hasParamAnno = true;
                 }
             }
 
@@ -57,6 +59,10 @@ public class ParameterNameResolver {
         // 没有参数
         if (args == null || args.length == 0) {
             return null;
+        }
+
+        else if (args.length == 1 && !hasParamAnno) {
+            return args[0];
         }
 
         // 参数转化成 map

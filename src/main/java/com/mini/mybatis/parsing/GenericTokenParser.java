@@ -18,12 +18,19 @@ public class GenericTokenParser {
         Matcher matcher = pattern.matcher(originalSql);
         StringBuilder sqlSb = new StringBuilder();
         while (matcher.find()) {
-            String content = matcher.group();
-            String replaceToken = tokenHandler.handleToken(content);
+            String group = matcher.group();
+            // group -> property name
+            String propertyName = parsePropertyName(group);
+            String replaceToken = tokenHandler.handleToken(propertyName);
             matcher.appendReplacement(sqlSb, replaceToken);
         }
         matcher.appendTail(sqlSb);
         String sql = sqlSb.toString();
         return StrUtil.isBlank(sql) ? originalSql : sql;
+    }
+
+    // 从正则表达式的 group 中提取内容
+    private static String parsePropertyName(String group) {
+        return group.substring(2, group.length() - 1);
     }
 }
