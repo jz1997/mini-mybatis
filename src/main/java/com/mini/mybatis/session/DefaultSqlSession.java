@@ -2,6 +2,8 @@ package com.mini.mybatis.session;
 
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.ReflectUtil;
+import com.mini.mybatis.executor.DefaultParameterHandler;
+import com.mini.mybatis.executor.ParameterHandler;
 import com.mini.mybatis.mapping.MappedStatement;
 import com.mini.mybatis.transaction.Transaction;
 import org.slf4j.Logger;
@@ -58,14 +60,15 @@ public class DefaultSqlSession implements SqlSession {
         SqlSource sqlSource = ms.getSqlSource();
         BoundSql bondSql = sqlSource.getBondSql(parameter);
         String sql = bondSql.getSql();
-        sql = sql.replaceAll("#\\{id}", "?");
+
         logger.info("sql: {}" + sql);
         logger.info("parameter: {}", parameter.toString());
         PreparedStatement ps = null;
+        ParameterHandler parameterHandler = new DefaultParameterHandler(ms, parameter);
         try {
             Connection connection = transaction.getConnection();
             ps = connection.prepareStatement(sql);
-            ps.setString(1, "1");
+            parameterHandler.setParameters(ps);
             ps.execute();
             ResultSet resultSet = ps.getResultSet();
             List<Object> objs = handlerResult(ms, resultSet);

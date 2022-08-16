@@ -95,4 +95,7 @@ public class TypeHandlerRegistry {
         return handler;
     }
 
+    public boolean has(Class<?> javaClass) {
+        return javaTypeHandlerMap.containsKey(javaClass);
+    }
 }

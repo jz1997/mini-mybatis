@@ -4,6 +4,7 @@ import com.mini.mybatis.builder.BaseBuilder;
 import com.mini.mybatis.parsing.GenericTokenParser;
 import com.mini.mybatis.parsing.ParameterMapping;
 import com.mini.mybatis.parsing.TokenHandler;
+import com.mini.mybatis.type.TypeHandlerRegistry;
 import lombok.Getter;
 
 import java.util.ArrayList;

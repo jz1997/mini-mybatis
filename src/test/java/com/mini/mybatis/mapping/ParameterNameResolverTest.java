@@ -31,7 +31,7 @@ class ParameterNameResolverTest {
         UserMapper userMapper = sqlSession.getMapper(UserMapper.class);
         Assertions.assertNotNull(userMapper);
 
-        User user = userMapper.findById("1");
+        User user = userMapper.selectByPrimaryKey("1");
         logger.info("Find User: {}", user.toString());
     }
 }

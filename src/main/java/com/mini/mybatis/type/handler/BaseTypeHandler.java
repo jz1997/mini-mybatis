@@ -12,22 +12,23 @@ import java.sql.SQLException;
 public abstract class BaseTypeHandler<T> implements TypeHandler<T> {
     @Override
     public void setParameter(PreparedStatement ps, int index, T parameter, JdbcType jdbcType) {
-        if (parameter == null) {
-            if (jdbcType == null) {
-                throw new TypeException("JdbcType 不能为空");
-            }
-            try {
-                ps.setNull(index, jdbcType.typeCode);
-            } catch (SQLException e) {
-                throw new TypeException("设置 NULL 参数失败, 失败原因: " + e, e);
-            }
-        } else {
-            try {
-                setNonNullParameter(ps, index, parameter, jdbcType);
-            } catch (SQLException e) {
-                throw new TypeException("设置 NULL 参数失败, 失败原因: " + e, e);
-            }
+        // todo: 增加 parameter 为 null 时, Statement 设置 null value 需要的 jdbc type
+//        if (parameter == null) {
+//            if (jdbcType == null) {
+//                throw new TypeException("JdbcType 不能为空");
+//            }
+//            try {
+//                ps.setNull(index, jdbcType.typeCode);
+//            } catch (SQLException e) {
+//                throw new TypeException("设置 NULL 参数失败, 失败原因: " + e, e);
+//            }
+//        } else {
+        try {
+            setNonNullParameter(ps, index, parameter, jdbcType);
+        } catch (SQLException e) {
+            throw new TypeException("设置 NULL 参数失败, 失败原因: " + e, e);
         }
+//        }
     }
 
     @Override
