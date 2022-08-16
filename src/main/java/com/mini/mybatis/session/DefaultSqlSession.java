@@ -2,8 +2,10 @@ package com.mini.mybatis.session;
 
 import cn.hutool.core.io.IoUtil;
 import cn.hutool.core.util.ReflectUtil;
-import com.mini.mybatis.executor.DefaultParameterHandler;
-import com.mini.mybatis.executor.ParameterHandler;
+import com.mini.mybatis.executor.parameter.DefaultParameterHandler;
+import com.mini.mybatis.executor.parameter.ParameterHandler;
+import com.mini.mybatis.executor.resultset.DefaultResultSetHandler;
+import com.mini.mybatis.executor.resultset.ResultSetHandler;
 import com.mini.mybatis.mapping.MappedStatement;
 import com.mini.mybatis.transaction.Transaction;
 import org.slf4j.Logger;
@@ -65,13 +67,13 @@ public class DefaultSqlSession implements SqlSession {
         logger.info("parameter: {}", parameter.toString());
         PreparedStatement ps = null;
         ParameterHandler parameterHandler = new DefaultParameterHandler(ms, parameter);
+        ResultSetHandler resultSetHandler = new DefaultResultSetHandler(ms);
         try {
             Connection connection = transaction.getConnection();
             ps = connection.prepareStatement(sql);
             parameterHandler.setParameters(ps);
             ps.execute();
-            ResultSet resultSet = ps.getResultSet();
-            List<Object> objs = handlerResult(ms, resultSet);
+            List<Object> objs = resultSetHandler.handleResultSet(ps);
             return (List<E>) objs;
         } catch (SQLException e) {
             throw new RuntimeException(e);

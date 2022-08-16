@@ -1,4 +1,4 @@
-package com.mini.mybatis.executor;
+package com.mini.mybatis.executor.parameter;
 
 import java.sql.PreparedStatement;
 
